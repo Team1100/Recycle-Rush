@@ -1,10 +1,8 @@
 package org.team1100;
 
-import org.team1100.commands.drive.DriveCommand;
 import org.team1100.subsystems.DriveSubsystem;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -21,8 +19,6 @@ public class Robot extends IterativeRobot {
 	public static DriveSubsystem driveTrain;
 	public static OI OI;
 
-	Command autonomousCommand;
-
 	public void robotInit() {
 		driveTrain = new DriveSubsystem();
 		OI = new OI();
@@ -31,7 +27,6 @@ public class Robot extends IterativeRobot {
 	}
 	
 	public void autonomousInit() {
-		autonomousCommand.start();
 	}
 
 	public void autonomousPeriodic() {
@@ -40,7 +35,6 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void teleopInit() {
-		autonomousCommand.cancel();
 	}
 	
 	public void teleopPeriodic() {

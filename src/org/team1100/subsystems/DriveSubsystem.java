@@ -23,12 +23,8 @@ public class DriveSubsystem extends Subsystem {
 	 * Initializes the DriveSubsystem, using the talon values from RobotMap
 	 */
 	public DriveSubsystem() {
-		Jaguar frontLeftCIM = new Jaguar(RobotMap.D_FRONT_LEFT_CIM);
-		Jaguar rearLeftCIM = new Jaguar(RobotMap.D_REAR_LEFT_CIM);
-		Jaguar frontRightCIM = new Jaguar(RobotMap.D_FRONT_RIGHT_CIM);
-		Jaguar rearRightCIM = new Jaguar(RobotMap.D_REAR_RIGHT_CIM);
-		
-		drive = new RobotDrive(frontLeftCIM, rearLeftCIM, frontRightCIM, rearRightCIM);
+		drive = new RobotDrive(RobotMap.D_FRONT_LEFT_CIM, RobotMap.D_REAR_LEFT_CIM,
+				RobotMap.D_FRONT_RIGHT_CIM, RobotMap.D_REAR_RIGHT_CIM);
 	}
 
 	/**
@@ -36,16 +32,11 @@ public class DriveSubsystem extends Subsystem {
 	 * to drive the robot
 	 */
 	public void userDriveTank() {
-		/*
 		double leftValue = Robot.OI.getLeftJoystick().getAxis(Joystick.AxisType.kY);
 		double rightValue = Robot.OI.getRightJoystick().getAxis(Joystick.AxisType.kY);
-		*/
-		double leftValue = Robot.OI.getXboxController().getAxis(XboxController.XboxAxis.kYLeft);
-		double rightValue = Robot.OI.getXboxController().getAxis(XboxController.XboxAxis.kYRight);
 		SmartDashboard.putNumber("Left Value", leftValue);
 		SmartDashboard.putNumber("Right Value", rightValue);
-		
-		
+
 		drive.tankDrive(leftValue, rightValue);
 	}
 
