@@ -34,8 +34,6 @@ public class DriveSubsystem extends Subsystem {
 	public void userDriveTank() {
 		double leftValue = Robot.OI.getLeftJoystick().getAxis(Joystick.AxisType.kY);
 		double rightValue = Robot.OI.getRightJoystick().getAxis(Joystick.AxisType.kY);
-		SmartDashboard.putNumber("Left Value", leftValue);
-		SmartDashboard.putNumber("Right Value", rightValue);
 
 		drive.tankDrive(leftValue, rightValue);
 	}
