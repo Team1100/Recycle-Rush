@@ -26,6 +26,10 @@ public class RobotMap {
     //[M]anipulator
     public static final int M_ELEVATOR_CIM_1 = 2;
     public static final int M_ELEVATOR_CIM_2 = 3;
+    public static final int M_INTAKE_LEFT_MOTOR = 4;
+    public static final int M_INTAKE_RIGHT_MOTOR = 5;
+    public static final int M_INTAKE_LEFT_GRIP_CYLINDER = 0;
+    public static final int M_INTAKE_RIGHT_GRIP_CYLINDER = 1;
 	public static final int M_ENCODER_A = 0;
 	public static final int M_ENCODER_B = 1;
 	public static final int M_BEAM_BREAK = 2;
