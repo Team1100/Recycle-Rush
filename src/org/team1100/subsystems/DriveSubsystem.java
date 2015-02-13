@@ -5,10 +5,11 @@ import org.team1100.RobotMap;
 import org.team1100.commands.drive.UserDriveCommand;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.RobotDrive;
-import edu.wpi.first.wpilibj.RobotDrive.MotorType;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
@@ -16,6 +17,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 public class DriveSubsystem extends Subsystem {
 
 	private RobotDrive drive;
+	PowerDistributionPanel pdp;
 
 	/**
 	 * Initializes the DriveSubsystem, using the talon values from RobotMap
@@ -25,6 +27,7 @@ public class DriveSubsystem extends Subsystem {
 		Victor rightCIM = new Victor(RobotMap.D_FRONT_RIGHT_CIM);
 		
 		drive = new RobotDrive(leftCIM, rightCIM);
+		pdp = new PowerDistributionPanel();
 	}
 
 	/**
@@ -36,6 +39,9 @@ public class DriveSubsystem extends Subsystem {
 		double rightValue = Robot.OI.getRightJoystick().getAxis(Joystick.AxisType.kY);
 
 		drive.tankDrive(leftValue, rightValue);
+		
+		
+		SmartDashboard.putNumber("Drive Current", pdp.getCurrent(2) + pdp.getCurrent(13));
 	}
 
 	/**

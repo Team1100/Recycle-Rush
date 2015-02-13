@@ -1,10 +1,8 @@
 package org.team1100.commands.manipulator;
 
 import org.team1100.Robot;
-import org.team1100.input.XboxController.XboxAxis;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class ElevatorCommand extends Command {
 

@@ -1,5 +1,6 @@
 package org.team1100;
 
+import org.team1100.input.MicrosoftCamera;
 import org.team1100.subsystems.DriveSubsystem;
 import org.team1100.subsystems.Elevator;
 
@@ -25,6 +26,8 @@ public class Robot extends IterativeRobot {
 		driveTrain = new DriveSubsystem();
 		OI = new OI();
 		elevator = new Elevator();
+		
+		//LogitechCamera.getInstance().start();
 		
 		SmartDashboard.putData(driveTrain);
 		SmartDashboard.putData(elevator);
