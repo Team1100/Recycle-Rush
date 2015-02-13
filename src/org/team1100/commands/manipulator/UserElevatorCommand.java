@@ -5,26 +5,30 @@ import org.team1100.subsystems.Elevator;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class MoveElevatorToBottomCommand extends Command {
-	
+public class UserElevatorCommand extends Command {
+
+	public UserElevatorCommand() {
+		requires(Elevator.getInstance());
+	}
+
 	@Override
 	protected void initialize() {
-		requires(Elevator.getInstance());
-		Elevator.getInstance().goToBottom();
 	}
 
 	@Override
 	protected void execute() {
+		Elevator.getInstance().userLift();
+		//SmartDashboard.putNumber("Encoder", Robot.elevator.getPosition());
 	}
 
 	@Override
 	protected boolean isFinished() {
-		return Elevator.getInstance().onTarget();
+		return false;
 	}
 
 	@Override
 	protected void end() {
-		Elevator.getInstance().disable();
+		Elevator.getInstance().stop();
 	}
 
 	@Override

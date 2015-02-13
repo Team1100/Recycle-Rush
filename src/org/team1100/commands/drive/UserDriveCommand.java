@@ -1,13 +1,14 @@
 package org.team1100.commands.drive;
 
 import org.team1100.Robot;
+import org.team1100.subsystems.DriveTrain;
 
 import edu.wpi.first.wpilibj.command.Command;
 
 public class UserDriveCommand extends Command {
 
 	public UserDriveCommand(){
-		requires(Robot.driveTrain);
+		requires(DriveTrain.getInstance());
 	}
 	
 	@Override
@@ -16,7 +17,7 @@ public class UserDriveCommand extends Command {
 
 	@Override
 	protected void execute() {
-		Robot.driveTrain.userDriveTank();
+		DriveTrain.getInstance().userDriveTank();
 	}
 
 	@Override
@@ -26,7 +27,7 @@ public class UserDriveCommand extends Command {
 
 	@Override
 	protected void end() {
-		Robot.driveTrain.stop();
+		DriveTrain.getInstance().stop();
 	}
 
 	@Override

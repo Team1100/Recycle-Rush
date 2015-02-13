@@ -1,38 +1,36 @@
 package org.team1100.commands.manipulator;
 
 import org.team1100.Robot;
+import org.team1100.subsystems.Elevator;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class ElevatorCommand extends Command {
-
-	public ElevatorCommand() {
-		requires(Robot.elevator);
-	}
+public class ResetElevatorEncoderCommand extends Command {
 
 	@Override
 	protected void initialize() {
+		requires(Elevator.getInstance());
+		setInterruptible(true);
 	}
 
 	@Override
 	protected void execute() {
-		Robot.elevator.userLift();
-		//SmartDashboard.putNumber("Encoder", Robot.elevator.getPosition());
+		Elevator.getInstance().lift(-1);
 	}
 
 	@Override
 	protected boolean isFinished() {
-		return false;
+		return Elevator.getInstance().getBeamBreak();
 	}
 
 	@Override
 	protected void end() {
-		Robot.elevator.stop();
+		Elevator.getInstance().resetEncoder();
 	}
 
 	@Override
 	protected void interrupted() {
-		end();
+		
 	}
 
 }

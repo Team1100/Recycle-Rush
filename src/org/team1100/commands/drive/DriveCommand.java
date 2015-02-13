@@ -1,6 +1,7 @@
 package org.team1100.commands.drive;
 
 import org.team1100.Robot;
+import org.team1100.subsystems.DriveTrain;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -18,7 +19,7 @@ public class DriveCommand extends Command {
 	 * @param timeout how long the command should run, in seconds
 	 */
 	public DriveCommand(double leftValue, double rightValue, double timeout) {
-		requires(Robot.driveTrain);
+		requires(DriveTrain.getInstance());
 		this.leftValue = leftValue;
 		this.rightValue = rightValue;
 		this.timeout = timeout;
@@ -31,7 +32,7 @@ public class DriveCommand extends Command {
 
 	@Override
 	protected void execute() {
-		Robot.driveTrain.driveTank(leftValue, rightValue);
+		DriveTrain.getInstance().driveTank(leftValue, rightValue);
 	}
 
 	@Override
@@ -41,7 +42,7 @@ public class DriveCommand extends Command {
 
 	@Override
 	protected void end() {
-		Robot.driveTrain.stop();
+		DriveTrain.getInstance().stop();
 	}
 
 	@Override

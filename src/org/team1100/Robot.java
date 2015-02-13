@@ -1,7 +1,8 @@
 package org.team1100;
 
-import org.team1100.input.MicrosoftCamera;
-import org.team1100.subsystems.DriveSubsystem;
+import org.team1100.commands.AutonomousCommand;
+import org.team1100.commands.manipulator.ResetElevatorEncoderCommand;
+import org.team1100.subsystems.DriveTrain;
 import org.team1100.subsystems.Elevator;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -18,22 +19,21 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Robot extends IterativeRobot {
 
-	public static DriveSubsystem driveTrain;
-	public static OI OI;
-	public static Elevator elevator;
+	private AutonomousCommand autoCommand;
 
 	public void robotInit() {
-		driveTrain = new DriveSubsystem();
-		OI = new OI();
-		elevator = new Elevator();
+		OI.getInstance();
+		// LogitechCamera.getInstance().start();
+		SmartDashboard.putData(DriveTrain.getInstance());
+		SmartDashboard.putData(Elevator.getInstance());
 		
-		//LogitechCamera.getInstance().start();
-		
-		SmartDashboard.putData(driveTrain);
-		SmartDashboard.putData(elevator);
+		SmartDashboard.putData(new ResetElevatorEncoderCommand());
+
+		autoCommand = new AutonomousCommand();
 	}
-	
+
 	public void autonomousInit() {
+		autoCommand.start();
 	}
 
 	public void autonomousPeriodic() {
@@ -42,27 +42,30 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void teleopInit() {
+		autoCommand.cancel();
+		if (!Elevator.getInstance().isEncoderReset())
+			new ResetElevatorEncoderCommand().start();
 	}
-	
+
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
 		log();
 	}
-	
+
 	public void testPeriodic() {
 		LiveWindow.run();
 		log();
 	}
 
 	public void disabledInit() {
-	}	
-	
+	}
+
 	public void disabledPeriodic() {
 		Scheduler.getInstance().run();
 		log();
 	}
 
-	private void log(){
-		
+	private void log() {
+
 	}
 }

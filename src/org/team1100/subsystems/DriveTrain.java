@@ -1,5 +1,6 @@
 package org.team1100.subsystems;
 
+import org.team1100.OI;
 import org.team1100.Robot;
 import org.team1100.RobotMap;
 import org.team1100.commands.drive.UserDriveCommand;
@@ -14,7 +15,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 /**
  *
  */
-public class DriveSubsystem extends Subsystem {
+public class DriveTrain extends Subsystem {
+
+	public static DriveTrain driveTrain = null;
+
+	public static DriveTrain getInstance() {
+		if (driveTrain == null)
+			driveTrain = new DriveTrain();
+		return driveTrain;
+	}
 
 	private RobotDrive drive;
 	PowerDistributionPanel pdp;
@@ -22,10 +31,10 @@ public class DriveSubsystem extends Subsystem {
 	/**
 	 * Initializes the DriveSubsystem, using the talon values from RobotMap
 	 */
-	public DriveSubsystem() {
+	private DriveTrain() {
 		Victor leftCIM = new Victor(RobotMap.D_FRONT_LEFT_CIM);
 		Victor rightCIM = new Victor(RobotMap.D_FRONT_RIGHT_CIM);
-		
+
 		drive = new RobotDrive(leftCIM, rightCIM);
 		pdp = new PowerDistributionPanel();
 	}
@@ -35,12 +44,11 @@ public class DriveSubsystem extends Subsystem {
 	 * to drive the robot
 	 */
 	public void userDriveTank() {
-		double leftValue = Robot.OI.getLeftJoystick().getAxis(Joystick.AxisType.kY);
-		double rightValue = Robot.OI.getRightJoystick().getAxis(Joystick.AxisType.kY);
+		double leftValue = OI.getInstance().getLeftJoystick().getAxis(Joystick.AxisType.kY);
+		double rightValue = OI.getInstance().getRightJoystick().getAxis(Joystick.AxisType.kY);
 
 		drive.tankDrive(leftValue, rightValue);
-		
-		
+
 		SmartDashboard.putNumber("Drive Current", pdp.getCurrent(2) + pdp.getCurrent(13));
 	}
 

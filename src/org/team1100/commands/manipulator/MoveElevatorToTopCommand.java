@@ -1,6 +1,7 @@
 package org.team1100.commands.manipulator;
 
 import org.team1100.Robot;
+import org.team1100.subsystems.Elevator;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -8,8 +9,8 @@ public class MoveElevatorToTopCommand extends Command {
 	
 	@Override
 	protected void initialize() {
-		requires(Robot.elevator);
-		Robot.elevator.goToTop();
+		requires(Elevator.getInstance());
+		Elevator.getInstance().goToTop();
 	}
 
 	@Override
@@ -18,12 +19,12 @@ public class MoveElevatorToTopCommand extends Command {
 
 	@Override
 	protected boolean isFinished() {
-		return Robot.elevator.onTarget();
+		return Elevator.getInstance().onTarget();
 	}
 
 	@Override
 	protected void end() {
-		Robot.elevator.disable();
+		Elevator.getInstance().disable();
 	}
 
 	@Override
