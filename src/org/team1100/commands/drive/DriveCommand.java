@@ -42,12 +42,10 @@ public class DriveCommand extends Command {
 
 	@Override
 	protected void end() {
-		DriveTrain.getInstance().stop();
 	}
 
 	@Override
 	protected void interrupted() {
-		end();
 	}
 
 }

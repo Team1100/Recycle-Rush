@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -26,15 +27,20 @@ public class DriveTrain extends Subsystem {
 	}
 
 	private RobotDrive drive;
+	private Victor victorLeft;
+	private Victor victorRight;
 
 	/**
-	 * Initializes the DriveSubsystem, using the talon values from RobotMap
+	 * Initializes the DriveTrain, using the talon values from RobotMap
 	 */
 	private DriveTrain() {
-		Victor leftCIM = new Victor(RobotMap.D_FRONT_LEFT_CIM);
-		Victor rightCIM = new Victor(RobotMap.D_FRONT_RIGHT_CIM);
+		victorLeft = new Victor(RobotMap.D_FRONT_LEFT_CIM);
+		victorRight = new Victor(RobotMap.D_FRONT_RIGHT_CIM);
 
-		drive = new RobotDrive(leftCIM, rightCIM);
+		drive = new RobotDrive(victorLeft, victorRight);
+		
+		LiveWindow.addActuator("Drive Train", "Left Victor", victorLeft);
+		LiveWindow.addActuator("Drive Train", "Right Victor", victorRight);
 	}
 
 	/**
@@ -45,13 +51,6 @@ public class DriveTrain extends Subsystem {
 	 */
 	public void driveTank(double leftValue, double rightValue) {
 		drive.tankDrive(leftValue, rightValue);
-	}
-
-	/**
-	 * Stops the drive train
-	 */
-	public void stop() {
-		drive.tankDrive(0, 0);
 	}
 
 	/**

@@ -32,12 +32,10 @@ public class UserDriveCommand extends Command {
 
 	@Override
 	protected void end() {
-		DriveTrain.getInstance().stop();
 	}
 
 	@Override
 	protected void interrupted() {
-		end();
 	}
 
 }

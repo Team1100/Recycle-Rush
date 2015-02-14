@@ -5,6 +5,7 @@ import org.team1100.RobotMap;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
 public class Intake extends Subsystem {
 	private static Intake intake = null;
@@ -27,6 +28,11 @@ public class Intake extends Subsystem {
 		victorRight = new Victor(RobotMap.M_INTAKE_RIGHT_MOTOR);
 		solenoidLeft = new Solenoid(RobotMap.M_INTAKE_LEFT_GRIP_CYLINDER);
 		solenoidRight = new Solenoid(RobotMap.M_INTAKE_RIGHT_GRIP_CYLINDER);
+		
+		LiveWindow.addActuator("Intake", "Left Victor", victorLeft);
+		LiveWindow.addActuator("Intake", "Right Victor", victorRight);
+		LiveWindow.addSensor("Intake", "Left Solenoid", solenoidLeft);
+		LiveWindow.addSensor("Intake", "Right Solenoid", solenoidRight);
 	}
 
 	public void rollIn() {

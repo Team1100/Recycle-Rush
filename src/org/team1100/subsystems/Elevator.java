@@ -6,11 +6,18 @@ import org.team1100.commands.manipulator.UserElevatorCommand;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
 public class Elevator extends PIDSubsystem {
 
 	private static Elevator elevator = null;
+	private static double TOP_SETPOINT = 1; // TODO Find the top of the elevator
+	private static double BOTTOM_SETPOINT = 0;
+	private static double P = 1 / TOP_SETPOINT;
+	private static double I = 0;
+	private static double D = 0;
 
 	public static Elevator getInstance() {
 		if (elevator == null)
@@ -18,11 +25,7 @@ public class Elevator extends PIDSubsystem {
 		return elevator;
 	}
 
-	private static double TOP_SETPOINT = 1; // TODO Find the top of the elevator
-	private static double BOTTOM_SETPOINT = 0;
-
 	private boolean encoderReset = false;
-
 	private CANTalon talon1;
 	private CANTalon talon2;
 	private Encoder encoder;
@@ -30,14 +33,23 @@ public class Elevator extends PIDSubsystem {
 	private DigitalInput infraredSensor;
 
 	private Elevator() {
-		super(1 / TOP_SETPOINT, 0, 0);
+		super(P, I, D);
 		this.getPIDController().setContinuous();
 		talon1 = new CANTalon(RobotMap.M_ELEVATOR_CIM_1);
 		talon2 = new CANTalon(RobotMap.M_ELEVATOR_CIM_2);
 
 		encoder = new Encoder(RobotMap.M_ENCODER_A, RobotMap.M_ENCODER_B);
-		beamBreak = new DigitalInput(RobotMap.M_ENCODER_A);
+		beamBreak = new DigitalInput(RobotMap.M_BEAM_BREAK);
 		infraredSensor = new DigitalInput(RobotMap.M_INFRARED_SENSOR);
+
+		LiveWindow.addSensor("Elevator", "Encoder", encoder);
+		LiveWindow.addSensor("Elevator", "Beam Break", beamBreak);
+		LiveWindow.addSensor("Elevator", "Infrared Sensor", infraredSensor);
+		LiveWindow.addSensor("Elevator", "PID Controller", getPIDController());
+
+		Preferences.getInstance().putDouble("P", P);
+		Preferences.getInstance().putDouble("I", I);
+		Preferences.getInstance().putDouble("D", D);
 	}
 
 	public void lift(double speed) {
@@ -45,10 +57,6 @@ public class Elevator extends PIDSubsystem {
 			speed = 0;
 		talon1.set(speed);
 		talon2.set(speed);
-	}
-
-	public void stop() {
-		lift(0);
 	}
 
 	public double getPosition() {
@@ -66,6 +74,14 @@ public class Elevator extends PIDSubsystem {
 
 	public boolean isEncoderReset() {
 		return encoderReset;
+	}
+
+	public boolean getBeamBreak() {
+		return beamBreak.get();
+	}
+
+	public boolean isToteInElevator() {
+		return infraredSensor.get();
 	}
 
 	@Override
@@ -86,12 +102,17 @@ public class Elevator extends PIDSubsystem {
 		setSetpoint(TOP_SETPOINT);
 	}
 
-	public boolean getBeamBreak() {
-		return beamBreak.get();
+	public void updatePID() {
+		P = Preferences.getInstance().getDouble("P", P);
+		I = Preferences.getInstance().getDouble("I", I);
+		D = Preferences.getInstance().getDouble("D", D);
+		getPIDController().setPID(P, I, D);
 	}
-	
-	public boolean isToteInElevator(){
-		return infraredSensor.get();
+
+	@Override
+	public void setSetpoint(double setpoint) {
+		updatePID();
+		super.setSetpoint(setpoint);
 	}
 
 	@Override
