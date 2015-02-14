@@ -1,23 +1,16 @@
 package org.team1100.subsystems;
 
-import org.team1100.OI;
-import org.team1100.Robot;
 import org.team1100.RobotMap;
 import org.team1100.commands.manipulator.UserElevatorCommand;
-import org.team1100.input.XboxController;
 
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-/**
- *
- */
 public class Elevator extends PIDSubsystem {
 
-	public static Elevator elevator = null;
+	private static Elevator elevator = null;
 
 	public static Elevator getInstance() {
 		if (elevator == null)
@@ -25,7 +18,6 @@ public class Elevator extends PIDSubsystem {
 		return elevator;
 	}
 
-	private static double SPEED_PERCENT = 0.5;
 	private static double TOP_SETPOINT = 1; // TODO Find the top of the elevator
 	private static double BOTTOM_SETPOINT = 0;
 
@@ -35,6 +27,7 @@ public class Elevator extends PIDSubsystem {
 	private CANTalon talon2;
 	private Encoder encoder;
 	private DigitalInput beamBreak;
+	private DigitalInput infraredSensor;
 
 	private Elevator() {
 		super(1 / TOP_SETPOINT, 0, 0);
@@ -44,21 +37,7 @@ public class Elevator extends PIDSubsystem {
 
 		encoder = new Encoder(RobotMap.M_ENCODER_A, RobotMap.M_ENCODER_B);
 		beamBreak = new DigitalInput(RobotMap.M_ENCODER_A);
-	}
-
-	public void userLift() {
-		double speed = 0;
-		double leftSpeed = OI.getInstance().getXboxController()
-				.getAxis(XboxController.XboxAxis.kLeftTrigger);
-		double rightSpeed = OI.getInstance().getXboxController()
-				.getAxis(XboxController.XboxAxis.kRightTrigger);
-
-		if (leftSpeed != 0)
-			speed = leftSpeed * SPEED_PERCENT;
-		else if (rightSpeed != 0)
-			speed = -rightSpeed * SPEED_PERCENT;
-
-		lift(speed);
+		infraredSensor = new DigitalInput(RobotMap.M_INFRARED_SENSOR);
 	}
 
 	public void lift(double speed) {
@@ -66,13 +45,6 @@ public class Elevator extends PIDSubsystem {
 			speed = 0;
 		talon1.set(speed);
 		talon2.set(speed);
-		// SmartDashboard.putNumber("Talon 1 Current",
-		// talon1.getOutputCurrent());
-		// SmartDashboard.putNumber("Talon 2 Current",
-		// talon2.getOutputCurrent());
-
-		// SmartDashboard.putNumber("Lift Current", talon1.getOutputCurrent() +
-		// talon2.getOutputCurrent());
 	}
 
 	public void stop() {
@@ -108,16 +80,18 @@ public class Elevator extends PIDSubsystem {
 
 	public void goToBottom() {
 		setSetpoint(BOTTOM_SETPOINT);
-		enable();
 	}
 
 	public void goToTop() {
 		setSetpoint(TOP_SETPOINT);
-		enable();
 	}
 
 	public boolean getBeamBreak() {
 		return beamBreak.get();
+	}
+	
+	public boolean isToteInElevator(){
+		return infraredSensor.get();
 	}
 
 	@Override

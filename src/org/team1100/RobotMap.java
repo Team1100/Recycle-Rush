@@ -78,8 +78,6 @@ public class RobotMap {
 	//[D]rive
 	public static final int D_FRONT_LEFT_CIM = PWM_0;
 	public static final int D_FRONT_RIGHT_CIM = PWM_1;
-	public static final int D_REAR_LEFT_CIM = PWM_2;
-	public static final int D_REAR_RIGHT_CIM = PWM_3;
 
 	//[C]ontrol
     public static final int C_LEFT_JOYSTICK = DS_USB_0;
@@ -98,4 +96,5 @@ public class RobotMap {
 	public static final int M_ENCODER_A = DIO_0;
 	public static final int M_ENCODER_B = DIO_1;
 	public static final int M_BEAM_BREAK = DIO_2;
+	public static final int M_INFRARED_SENSOR = DIO_3;
 }

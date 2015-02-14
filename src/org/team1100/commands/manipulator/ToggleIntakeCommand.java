@@ -1,38 +1,42 @@
 package org.team1100.commands.manipulator;
 
-import org.team1100.subsystems.Elevator;
+import org.team1100.subsystems.Intake;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class MoveElevatorToTopCommand extends Command {
+public class ToggleIntakeCommand extends Command{
+
+	boolean isFinished;
 	
-	public MoveElevatorToTopCommand(){
-		requires(Elevator.getInstance());
+	public ToggleIntakeCommand(){
+		requires(Intake.getInstance());
+		isFinished = false;
 	}
 	
 	@Override
 	protected void initialize() {
-		Elevator.getInstance().enable();
-		Elevator.getInstance().goToTop();
+		
 	}
 
 	@Override
 	protected void execute() {
+		Intake.getInstance().toggleIntake();
+		isFinished = true;
 	}
 
 	@Override
 	protected boolean isFinished() {
-		return Elevator.getInstance().onTarget();
+		return isFinished;
 	}
 
 	@Override
 	protected void end() {
-		Elevator.getInstance().disable();
+		
 	}
 
 	@Override
 	protected void interrupted() {
-		end();
+		
 	}
 
 }

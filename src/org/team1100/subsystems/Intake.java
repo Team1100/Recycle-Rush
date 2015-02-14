@@ -6,12 +6,12 @@ import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
-public class IntakeSystem extends Subsystem {
-	private static IntakeSystem intake = null;
+public class Intake extends Subsystem {
+	private static Intake intake = null;
 
-	public static IntakeSystem getInstance() {
+	public static Intake getInstance() {
 		if (intake == null) {
-			intake = new IntakeSystem();
+			intake = new Intake();
 		}
 		return intake;
 	}
@@ -22,19 +22,19 @@ public class IntakeSystem extends Subsystem {
 	private Solenoid solenoidRight;
 	private boolean intakeClamped = false;
 
-	private IntakeSystem() {
+	private Intake() {
 		victorLeft = new Victor(RobotMap.M_INTAKE_LEFT_MOTOR);
 		victorRight = new Victor(RobotMap.M_INTAKE_RIGHT_MOTOR);
 		solenoidLeft = new Solenoid(RobotMap.M_INTAKE_LEFT_GRIP_CYLINDER);
 		solenoidRight = new Solenoid(RobotMap.M_INTAKE_RIGHT_GRIP_CYLINDER);
 	}
 
-	public void pullInTotes() {
+	public void rollIn() {
 		victorLeft.set(1);
 		victorRight.set(-1);
 	}
 
-	public void pushOutTotes() {
+	public void rollOut() {
 		victorLeft.set(-1);
 		victorRight.set(1);
 	}
@@ -52,8 +52,7 @@ public class IntakeSystem extends Subsystem {
 
 	@Override
 	protected void initDefaultCommand() {
-		// TODO Auto-generated method stub
-
+		
 	}
 
 }

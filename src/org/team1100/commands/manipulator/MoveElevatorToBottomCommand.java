@@ -1,15 +1,18 @@
 package org.team1100.commands.manipulator;
 
-import org.team1100.Robot;
 import org.team1100.subsystems.Elevator;
 
 import edu.wpi.first.wpilibj.command.Command;
 
 public class MoveElevatorToBottomCommand extends Command {
 	
+	public MoveElevatorToBottomCommand(){
+		requires(Elevator.getInstance());
+	}
+	
 	@Override
 	protected void initialize() {
-		requires(Elevator.getInstance());
+		Elevator.getInstance().enable();
 		Elevator.getInstance().goToBottom();
 	}
 

@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class DriveTrain extends Subsystem {
 
-	public static DriveTrain driveTrain = null;
+	private static DriveTrain driveTrain = null;
 
 	public static DriveTrain getInstance() {
 		if (driveTrain == null)
@@ -26,7 +26,6 @@ public class DriveTrain extends Subsystem {
 	}
 
 	private RobotDrive drive;
-	PowerDistributionPanel pdp;
 
 	/**
 	 * Initializes the DriveSubsystem, using the talon values from RobotMap
@@ -36,20 +35,6 @@ public class DriveTrain extends Subsystem {
 		Victor rightCIM = new Victor(RobotMap.D_FRONT_RIGHT_CIM);
 
 		drive = new RobotDrive(leftCIM, rightCIM);
-		pdp = new PowerDistributionPanel();
-	}
-
-	/**
-	 * This is repeatedly called in the UserDriveCommand, allowing the operator
-	 * to drive the robot
-	 */
-	public void userDriveTank() {
-		double leftValue = OI.getInstance().getLeftJoystick().getAxis(Joystick.AxisType.kY);
-		double rightValue = OI.getInstance().getRightJoystick().getAxis(Joystick.AxisType.kY);
-
-		drive.tankDrive(leftValue, rightValue);
-
-		SmartDashboard.putNumber("Drive Current", pdp.getCurrent(2) + pdp.getCurrent(13));
 	}
 
 	/**
