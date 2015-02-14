@@ -4,35 +4,35 @@ import org.team1100.subsystems.Elevator;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class MoveElevatorToTopCommand extends Command {
-	
-	public MoveElevatorToTopCommand(){
+public class ResetElevatorEncoderCommand extends Command {
+
+	public ResetElevatorEncoderCommand(){
 		requires(Elevator.getInstance());
+		setInterruptible(false);
 	}
 	
 	@Override
 	protected void initialize() {
-		Elevator.getInstance().enable();
-		Elevator.getInstance().goToTop();
 	}
 
 	@Override
 	protected void execute() {
+		Elevator.getInstance().lift(-1);
 	}
 
 	@Override
 	protected boolean isFinished() {
-		return Elevator.getInstance().onTarget();
+		return Elevator.getInstance().getBeamBreak();
 	}
 
 	@Override
 	protected void end() {
-		Elevator.getInstance().disable();
+		Elevator.getInstance().resetEncoder();
 	}
 
 	@Override
 	protected void interrupted() {
-		end();
+		//This will never be called
 	}
 
 }

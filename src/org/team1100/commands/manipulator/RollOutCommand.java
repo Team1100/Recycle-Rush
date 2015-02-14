@@ -1,23 +1,23 @@
 package org.team1100.commands.manipulator;
 
-import org.team1100.Robot;
+import org.team1100.subsystems.Intake;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class ElevatorCommand extends Command {
+public class RollOutCommand extends Command{
 
-	public ElevatorCommand() {
-		requires(Robot.elevator);
+	public RollOutCommand(){
+		requires(Intake.getInstance());
 	}
-
+	
 	@Override
 	protected void initialize() {
+		
 	}
 
 	@Override
 	protected void execute() {
-		Robot.elevator.userLift();
-		//SmartDashboard.putNumber("Encoder", Robot.elevator.getPosition());
+		Intake.getInstance().rollOut();
 	}
 
 	@Override
@@ -27,12 +27,12 @@ public class ElevatorCommand extends Command {
 
 	@Override
 	protected void end() {
-		Robot.elevator.stop();
+		
 	}
 
 	@Override
 	protected void interrupted() {
-		end();
+		
 	}
-
+	
 }
