@@ -1,17 +1,17 @@
 package org.team1100;
 
 import org.team1100.commands.autonomous.AutonomousCommand;
-import org.team1100.commands.manipulator.ResetElevatorEncoderCommand;
+import org.team1100.commands.manipulator.PickUpToteCommand;
+import org.team1100.commands.manipulator.elevator.ResetElevatorEncoderCommand;
 import org.team1100.commands.util.LogFileCommand;
-import org.team1100.input.MicrosoftCamera;
 import org.team1100.subsystems.DriveTrain;
 import org.team1100.subsystems.Elevator;
 import org.team1100.subsystems.Intake;
 
 import com.ni.vision.VisionException;
 
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -33,9 +33,14 @@ public class Robot extends IterativeRobot {
 	public void robotInit() {
 		OI.getInstance();
 		try {
-			MicrosoftCamera.getInstance().start();
+			//CameraServer.getInstance().startAutomaticCapture(RobotMap.CAMERA_NAME);
+			//MicrosoftCamera.getInstance().start();
 		} catch (VisionException ve) {
 			isCameraConnected = false;
+		} catch (Exception e) {
+			e.printStackTrace(System.err);
+			isCameraConnected = false;
+
 		}
 		SmartDashboard.putBoolean("Camera Connected: ", isCameraConnected);
 
@@ -44,17 +49,15 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putData(Intake.getInstance());
 
 		SmartDashboard.putData(new ResetElevatorEncoderCommand());
+		SmartDashboard.putData(new PickUpToteCommand());
 
 		SmartDashboard.putData(Scheduler.getInstance());
-		
+
 		autoCommand = new AutonomousCommand();
 		logFile = new LogFileCommand();
 	}
 
 	private void log() {
-		double l = 4;
-		Preferences.getInstance().putDouble("Test", 4);
-		Preferences.getInstance().getDouble("Test", l);
 	}
 
 	public void autonomousInit() {
@@ -70,10 +73,10 @@ public class Robot extends IterativeRobot {
 	public void teleopInit() {
 		/*
 		 * if (!logFile.isRunning()) logFile.start();
+		 * 
+		 * autoCommand.cancel(); if (!Elevator.getInstance().isEncoderReset())
+		 * new ResetElevatorEncoderCommand().start();
 		 */
-		autoCommand.cancel();
-		if (!Elevator.getInstance().isEncoderReset())
-			new ResetElevatorEncoderCommand().start();
 	}
 
 	public void teleopPeriodic() {

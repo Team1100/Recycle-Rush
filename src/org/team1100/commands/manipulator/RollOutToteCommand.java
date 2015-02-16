@@ -1,38 +1,39 @@
 package org.team1100.commands.manipulator;
 
 import org.team1100.subsystems.Elevator;
+import org.team1100.subsystems.Intake;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class MoveElevatorToTopCommand extends Command {
-	
-	public MoveElevatorToTopCommand(){
+public class RollOutToteCommand extends Command {
+
+	public RollOutToteCommand() {
+		requires(Intake.getInstance());
 		requires(Elevator.getInstance());
 	}
-	
+
 	@Override
 	protected void initialize() {
-		Elevator.getInstance().enable();
-		Elevator.getInstance().goToTop();
 	}
 
 	@Override
 	protected void execute() {
+		Intake.getInstance().rollOut();
 	}
 
 	@Override
 	protected boolean isFinished() {
-		return Elevator.getInstance().onTarget();
+		return Elevator.getInstance().isToteOutOfElevator();
 	}
 
 	@Override
 	protected void end() {
-		Elevator.getInstance().disable();
+
 	}
 
 	@Override
 	protected void interrupted() {
-		end();
+
 	}
 
 }

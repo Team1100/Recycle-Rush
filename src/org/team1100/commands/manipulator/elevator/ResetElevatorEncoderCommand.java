@@ -1,28 +1,31 @@
-package org.team1100.commands.manipulator;
+package org.team1100.commands.manipulator.elevator;
 
 import org.team1100.subsystems.Elevator;
 
+import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.command.Command;
 
 public class ResetElevatorEncoderCommand extends Command {
-
+	
+	private double RESET_SPEED = -.5;
+	
 	public ResetElevatorEncoderCommand(){
 		requires(Elevator.getInstance());
 		setInterruptible(false);
 	}
 	
 	@Override
-	protected void initialize() {
+	protected void initialize() {	
 	}
 
 	@Override
 	protected void execute() {
-		Elevator.getInstance().lift(-1);
+;		Elevator.getInstance().lift(-.6);
 	}
 
 	@Override
 	protected boolean isFinished() {
-		return Elevator.getInstance().getBeamBreak();
+		return !Elevator.getInstance().getBeamBreak();
 	}
 
 	@Override

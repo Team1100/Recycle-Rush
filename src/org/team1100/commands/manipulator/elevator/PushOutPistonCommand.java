@@ -1,38 +1,43 @@
-package org.team1100.commands.manipulator;
+package org.team1100.commands.manipulator.elevator;
 
 import org.team1100.subsystems.Elevator;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class MoveElevatorToBottomCommand extends Command {
+public class PushOutPistonCommand extends Command{
+
+	private boolean isFinished = false;
 	
-	public MoveElevatorToBottomCommand(){
+	public PushOutPistonCommand(){
 		requires(Elevator.getInstance());
 	}
 	
 	@Override
 	protected void initialize() {
-		Elevator.getInstance().enable();
-		Elevator.getInstance().goToBottom();
+		
 	}
 
 	@Override
 	protected void execute() {
+		Elevator.getInstance().pushOutPiston();
+		isFinished = true;
 	}
 
 	@Override
 	protected boolean isFinished() {
-		return Elevator.getInstance().onTarget();
+		return isFinished;
 	}
 
 	@Override
 	protected void end() {
-		Elevator.getInstance().disable();
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
 	protected void interrupted() {
-		end();
+		// TODO Auto-generated method stub
+		
 	}
 
 }

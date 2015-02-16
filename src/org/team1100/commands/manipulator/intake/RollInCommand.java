@@ -1,12 +1,12 @@
-package org.team1100.commands.manipulator;
+package org.team1100.commands.manipulator.intake;
 
 import org.team1100.subsystems.Intake;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class RollOutCommand extends Command{
+public class RollInCommand extends Command{
 
-	public RollOutCommand(){
+	public RollInCommand(){
 		requires(Intake.getInstance());
 	}
 	
@@ -17,7 +17,7 @@ public class RollOutCommand extends Command{
 
 	@Override
 	protected void execute() {
-		Intake.getInstance().rollOut();
+		Intake.getInstance().rollIn();
 	}
 
 	@Override
@@ -27,12 +27,12 @@ public class RollOutCommand extends Command{
 
 	@Override
 	protected void end() {
-		
+		Intake.getInstance().stopIntake();
 	}
 
 	@Override
 	protected void interrupted() {
-		
+		end();
 	}
 	
 }

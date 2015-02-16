@@ -1,4 +1,4 @@
-package org.team1100.commands.manipulator;
+package org.team1100.commands.manipulator.intake;
 
 import org.team1100.subsystems.Intake;
 

@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.vision.USBCamera;
 
 public class MicrosoftCamera extends USBCamera {
 	private static MicrosoftCamera camera;
-	private CameraServer server;
 	private Image currentFrame;
 
 	public static MicrosoftCamera getInstance() {
@@ -22,12 +21,10 @@ public class MicrosoftCamera extends USBCamera {
 
 	private MicrosoftCamera(String name) {
 		super(name);
-		openCamera();
-		server = CameraServer.getInstance();
 	}
 
 	public void start() {
-		server.startAutomaticCapture(this);
+		CameraServer.getInstance().startAutomaticCapture(this);
 	}
 	
 	public Image getCurrentFrame(){

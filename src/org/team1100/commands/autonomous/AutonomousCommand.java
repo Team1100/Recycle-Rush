@@ -2,7 +2,7 @@ package org.team1100.commands.autonomous;
 
 import org.team1100.commands.drive.DriveCommand;
 import org.team1100.commands.manipulator.PickUpToteCommand;
-import org.team1100.commands.manipulator.ResetElevatorEncoderCommand;
+import org.team1100.commands.manipulator.elevator.ResetElevatorEncoderCommand;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 

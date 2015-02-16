@@ -1,24 +1,16 @@
 package org.team1100.subsystems;
 
-import org.team1100.OI;
-import org.team1100.Robot;
 import org.team1100.RobotMap;
 import org.team1100.commands.drive.UserDriveCommand;
 
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-/**
- *
- */
 public class DriveTrain extends Subsystem {
 
-	private static DriveTrain driveTrain = null;
+	private static DriveTrain driveTrain;
 
 	public static DriveTrain getInstance() {
 		if (driveTrain == null)
@@ -34,11 +26,11 @@ public class DriveTrain extends Subsystem {
 	 * Initializes the DriveTrain, using the talon values from RobotMap
 	 */
 	private DriveTrain() {
-		victorLeft = new Victor(RobotMap.D_FRONT_LEFT_CIM);
-		victorRight = new Victor(RobotMap.D_FRONT_RIGHT_CIM);
+		victorLeft = new Victor(RobotMap.D_LEFT_MOTOR);
+		victorRight = new Victor(RobotMap.D_RIGHT_MOTOR);
 
 		drive = new RobotDrive(victorLeft, victorRight);
-		
+
 		LiveWindow.addActuator("Drive Train", "Left Victor", victorLeft);
 		LiveWindow.addActuator("Drive Train", "Right Victor", victorRight);
 	}

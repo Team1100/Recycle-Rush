@@ -1,9 +1,10 @@
 package org.team1100;
 
 import org.team1100.commands.manipulator.PickUpToteCommand;
-import org.team1100.commands.manipulator.RollInCommand;
-import org.team1100.commands.manipulator.RollOutCommand;
-import org.team1100.commands.manipulator.ToggleIntakeCommand;
+import org.team1100.commands.manipulator.elevator.PushToteCommand;
+import org.team1100.commands.manipulator.intake.RollInCommand;
+import org.team1100.commands.manipulator.intake.RollOutCommand;
+import org.team1100.commands.manipulator.intake.ToggleIntakeCommand;
 import org.team1100.input.AttackThree;
 import org.team1100.input.LaunchpadController;
 import org.team1100.input.XboxController;
@@ -37,6 +38,7 @@ public class OI {
 		xbox.getButtonRightBumper().whileHeld(new RollOutCommand());
 		xbox.getButtonA().whenPressed(new ToggleIntakeCommand());
 		xbox.getButtonY().toggleWhenPressed(new PickUpToteCommand());
+		xbox.getButtonX().whenPressed(new PushToteCommand());
 	}
 
 	/**

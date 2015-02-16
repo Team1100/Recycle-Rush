@@ -1,4 +1,4 @@
-package org.team1100.commands.manipulator;
+package org.team1100.commands.manipulator.elevator;
 
 import org.team1100.OI;
 import org.team1100.input.XboxController;
@@ -6,11 +6,12 @@ import org.team1100.subsystems.Elevator;
 
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class UserElevatorCommand extends Command {
 
 	private static double SPEED_PERCENT = 0.5;
-	private static final String KEY_NAME = "Lift Speed %";
+	private static final String KEY_NAME = "Lift_Speed_Percent";
 
 	public UserElevatorCommand() {
 		requires(Elevator.getInstance());
@@ -32,9 +33,9 @@ public class UserElevatorCommand extends Command {
 				.getAxis(XboxController.XboxAxis.kRightTrigger);
 
 		if (leftSpeed != 0)
-			speed = leftSpeed * SPEED_PERCENT;
+			speed = -leftSpeed * SPEED_PERCENT;
 		else if (rightSpeed != 0)
-			speed = -rightSpeed * SPEED_PERCENT;
+			speed = rightSpeed * SPEED_PERCENT;
 
 		Elevator.getInstance().lift(speed);
 	}

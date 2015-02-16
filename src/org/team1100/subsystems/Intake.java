@@ -2,13 +2,15 @@ package org.team1100.subsystems;
 
 import org.team1100.RobotMap;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
 public class Intake extends Subsystem {
-	private static Intake intake = null;
+	private static Intake intake;
 
 	public static Intake getInstance() {
 		if (intake == null) {
@@ -19,46 +21,47 @@ public class Intake extends Subsystem {
 
 	private Victor victorLeft;
 	private Victor victorRight;
-	private Solenoid solenoidLeft;
-	private Solenoid solenoidRight;
+	private DoubleSolenoid solenoid;
 	private boolean intakeClamped = false;
 
 	private Intake() {
-		victorLeft = new Victor(RobotMap.M_INTAKE_LEFT_MOTOR);
-		victorRight = new Victor(RobotMap.M_INTAKE_RIGHT_MOTOR);
-		solenoidLeft = new Solenoid(RobotMap.M_INTAKE_LEFT_GRIP_CYLINDER);
-		solenoidRight = new Solenoid(RobotMap.M_INTAKE_RIGHT_GRIP_CYLINDER);
-		
+		victorLeft = new Victor(RobotMap.I_LEFT_MOTOR);
+		victorRight = new Victor(RobotMap.I_RIGHT_MOTOR);
+		solenoid = new DoubleSolenoid(RobotMap.PCM_ID, RobotMap.I_SOLENOID_A,
+				RobotMap.I_SOLENOID_B);
+		solenoid.set(Value.kOff);
 		LiveWindow.addActuator("Intake", "Left Victor", victorLeft);
 		LiveWindow.addActuator("Intake", "Right Victor", victorRight);
-		LiveWindow.addSensor("Intake", "Left Solenoid", solenoidLeft);
-		LiveWindow.addSensor("Intake", "Right Solenoid", solenoidRight);
+		LiveWindow.addSensor("Intake", "Solenoid", solenoid);
 	}
 
 	public void rollIn() {
 		victorLeft.set(1);
-		victorRight.set(-1);
+		victorRight.set(1);
 	}
 
 	public void rollOut() {
 		victorLeft.set(-1);
-		victorRight.set(1);
+		victorRight.set(-1);
+	}
+
+	public void stopIntake() {
+		victorLeft.set(0);
+		victorRight.set(0);
 	}
 
 	public void toggleIntake() {
 		if (intakeClamped) {
-			solenoidLeft.set(false);
-			solenoidRight.set(false);
+			solenoid.set(Value.kReverse);
 		} else {
-			solenoidLeft.set(true);
-			solenoidRight.set(true);
+			solenoid.set(Value.kForward);
 		}
 		intakeClamped = !intakeClamped;
 	}
 
 	@Override
 	protected void initDefaultCommand() {
-		
+
 	}
 
 }
