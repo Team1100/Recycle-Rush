@@ -28,12 +28,12 @@ public class RollInToteCommand extends Command {
 
 	@Override
 	protected void end() {
-		
+		Intake.getInstance().stopIntake();
 	}
 
 	@Override
 	protected void interrupted() {
-		
+		end();
 	}
 
 }

@@ -1,9 +1,12 @@
 package org.team1100;
 
 import org.team1100.commands.manipulator.PickUpToteCommand;
-import org.team1100.commands.manipulator.elevator.PushToteCommand;
-import org.team1100.commands.manipulator.intake.RollInCommand;
-import org.team1100.commands.manipulator.intake.RollOutCommand;
+import org.team1100.commands.manipulator.ScoreTotesCommand;
+import org.team1100.commands.manipulator.arm.ToggleArmGripperCommand;
+import org.team1100.commands.manipulator.arm.ToggleClawRotateCommand;
+import org.team1100.commands.manipulator.elevator.MoveElevatorToBottomCommand;
+import org.team1100.commands.manipulator.elevator.MoveElevatorToDriveCommand;
+import org.team1100.commands.manipulator.elevator.ResetElevatorEncoderCommand;
 import org.team1100.commands.manipulator.intake.ToggleIntakeCommand;
 import org.team1100.input.AttackThree;
 import org.team1100.input.LaunchpadController;
@@ -31,14 +34,15 @@ public class OI {
 	private OI() {
 		rightStick = new AttackThree(RobotMap.C_RIGHT_JOYSTICK, 0.1);
 		leftStick = new AttackThree(RobotMap.C_LEFT_JOYSTICK, 0.1);
-		xbox = new XboxController(RobotMap.C_XBOX_CONTROLLER, 0.1);
+		xbox = new XboxController(RobotMap.C_XBOX_CONTROLLER, 0.2);
 		launchPad = new LaunchpadController(RobotMap.C_LAUNCHPAD_CONTROLLER);
-		
-		xbox.getButtonLeftBumper().whileHeld(new RollInCommand());
-		xbox.getButtonRightBumper().whileHeld(new RollOutCommand());
-		xbox.getButtonA().whenPressed(new ToggleIntakeCommand());
-		xbox.getButtonY().toggleWhenPressed(new PickUpToteCommand());
-		xbox.getButtonX().whenPressed(new PushToteCommand());
+
+		xbox.getButtonLeftBumper().whenPressed(new ToggleArmGripperCommand());
+		xbox.getButtonRightBumper().whenPressed(new ToggleIntakeCommand());
+		xbox.getButtonA().whenPressed(new ToggleClawRotateCommand());
+		xbox.getButtonX().toggleWhenPressed(new ScoreTotesCommand());
+		xbox.getButtonB().toggleWhenPressed(new PickUpToteCommand());
+		xbox.getButtonBack().whenPressed(new ResetElevatorEncoderCommand());
 	}
 
 	/**

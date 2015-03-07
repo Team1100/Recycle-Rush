@@ -5,35 +5,37 @@ import org.team1100.subsystems.Intake;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class RollOutToteCommand extends Command {
-
-	public RollOutToteCommand() {
+public class StartRollInCommand extends Command{
+	
+	public StartRollInCommand(){
 		requires(Intake.getInstance());
 		requires(Elevator.getInstance());
 	}
-
+	
 	@Override
 	protected void initialize() {
 	}
 
 	@Override
 	protected void execute() {
-		Intake.getInstance().rollOut();
+		Intake.getInstance().rollIn();
 	}
 
 	@Override
 	protected boolean isFinished() {
-		return !Elevator.getInstance().isFrontBeamBroken();
+		return Elevator.getInstance().isFrontBeamBroken(); 
 	}
 
 	@Override
 	protected void end() {
-
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
 	protected void interrupted() {
-
+		// TODO Auto-generated method stub
+		
 	}
-
+	
 }

@@ -4,15 +4,14 @@ import org.team1100.subsystems.Elevator;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class MoveElevatorToPlatformCommand extends Command {
-	public MoveElevatorToPlatformCommand() {
+public class WaitForToteCommand extends Command {
+
+	public WaitForToteCommand() {
 		requires(Elevator.getInstance());
 	}
 
 	@Override
 	protected void initialize() {
-		Elevator.getInstance().enable();
-		Elevator.getInstance().goToPlatformHeigh();
 	}
 
 	@Override
@@ -21,17 +20,17 @@ public class MoveElevatorToPlatformCommand extends Command {
 
 	@Override
 	protected boolean isFinished() {
-		return Elevator.getInstance().onTarget();
+		return Elevator.getInstance().isToteInElevator();
 	}
 
 	@Override
 	protected void end() {
-		Elevator.getInstance().disable();
+
 	}
 
 	@Override
 	protected void interrupted() {
-		end();
+
 	}
 
 }

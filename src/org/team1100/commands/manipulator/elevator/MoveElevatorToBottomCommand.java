@@ -2,7 +2,9 @@ package org.team1100.commands.manipulator.elevator;
 
 import org.team1100.subsystems.Elevator;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class MoveElevatorToBottomCommand extends Command {
 	
@@ -13,7 +15,7 @@ public class MoveElevatorToBottomCommand extends Command {
 	@Override
 	protected void initialize() {
 		Elevator.getInstance().enable();
-		Elevator.getInstance().goToBottom();
+		Elevator.getInstance().setSetpoint(Elevator.BOTTOM_SETPOINT);
 	}
 
 	@Override

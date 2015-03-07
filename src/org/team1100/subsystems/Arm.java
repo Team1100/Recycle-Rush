@@ -3,10 +3,13 @@ package org.team1100.subsystems;
 import org.team1100.RobotMap;
 import org.team1100.commands.manipulator.arm.UserArmCommand;
 
-import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.AnalogPotentiometer;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
+import edu.wpi.first.wpilibj.interfaces.Potentiometer;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
 public class Arm extends PIDSubsystem {
@@ -21,23 +24,32 @@ public class Arm extends PIDSubsystem {
 	private static double I = 0;
 	private static double D = 0;
 
-	public static Arm getInstatnce() {
+	public static int TOP_SETPOINT = 0; // TODO Find setpoint
+	public static int SCORING_SETPOINT = 0; // TODO Find setpoint
+
+	public static Arm getInstance() {
 		if (arm == null)
 			arm = new Arm();
-		updatePreferences(arm);
+		updatePreferences();
 		return arm;
 	}
 
-	private static void updatePreferences(Arm arm) {
+	private static void updatePreferences() {
 		P = Preferences.getInstance().getDouble(pKey, P);
 		I = Preferences.getInstance().getDouble(iKey, I);
 		D = Preferences.getInstance().getDouble(dKey, D);
 		arm.getPIDController().setPID(P, I, D);
+
 	}
 
 	private Talon talonLeft;
 	private Talon talonRight;
-	private Encoder encoder;
+	private DoubleSolenoid gripperSolenoid;
+	private DoubleSolenoid clawRotateSolenoid;
+	private AnalogPotentiometer pot;
+
+	private boolean isGripperToggled;
+	private boolean isClawRotated;
 
 	private Arm() {
 		super(P, I, D);
@@ -45,9 +57,24 @@ public class Arm extends PIDSubsystem {
 		talonLeft = new Talon(RobotMap.A_LEFT_MOTOR);
 		talonRight = new Talon(RobotMap.A_RIGHT_MOTOR);
 
-		encoder = new Encoder(RobotMap.A_ENCODER_A, RobotMap.A_ENCODER_B);
+		pot = new AnalogPotentiometer(RobotMap.A_POTENTIOMETER);
 
-		LiveWindow.addActuator("Arm", "Encoder", encoder);
+		gripperSolenoid = new DoubleSolenoid(RobotMap.PCM_ID, RobotMap.A_GRIPPER_SOLENOID_A, RobotMap.A_GRIPPER_SOLENOID_B);
+		clawRotateSolenoid = new DoubleSolenoid(RobotMap.PCM_ID, RobotMap.A_CLAW_ROTATE_SOLENOID_A, RobotMap.A_CLAW_ROTATE_SOLENOID_B);
+
+		gripperSolenoid.set(Value.kForward);
+		clawRotateSolenoid.set(Value.kReverse);
+
+		isGripperToggled = true;
+		isClawRotated = false;
+
+		LiveWindow.addActuator("Arm", "Potentiometer", pot);
+		LiveWindow.addActuator("Arm", "Right Talon", talonRight);
+		LiveWindow.addActuator("Arm", "Left Talon", talonLeft);
+		LiveWindow.addActuator("Arm", "Toggle Gripper", gripperSolenoid);
+		LiveWindow.addActuator("Arm", "Rotate Claw", clawRotateSolenoid);
+		LiveWindow.addSensor("Arm", "Potentiometer", pot);
+		LiveWindow.addActuator("Arm", "PID Controller", getPIDController());
 
 		Preferences.getInstance().putDouble(pKey, P);
 		Preferences.getInstance().putDouble(iKey, I);
@@ -60,12 +87,28 @@ public class Arm extends PIDSubsystem {
 	}
 
 	public double getPosition() {
-		return encoder.get();
+		return pot.get();
 	}
-	
-	public void moveArm(double speed){
+
+	public void moveArm(double speed) {
 		talonLeft.set(speed);
 		talonRight.set(-speed);
+	}
+
+	public void toggleGripper() {
+		if (isGripperToggled)
+			gripperSolenoid.set(Value.kForward);
+		else
+			gripperSolenoid.set(Value.kReverse);
+		isGripperToggled = !isGripperToggled;
+	}
+
+	public void toggleRotateClaw() {
+		if (isClawRotated)
+			clawRotateSolenoid.set(Value.kForward);
+		else
+			clawRotateSolenoid.set(Value.kReverse);
+		isClawRotated = !isClawRotated;
 	}
 
 	@Override

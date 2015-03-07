@@ -25,7 +25,7 @@ public class ResetElevatorEncoderCommand extends Command {
 
 	@Override
 	protected boolean isFinished() {
-		return !Elevator.getInstance().getBeamBreak();
+		return Elevator.getInstance().isBeamBroken();
 	}
 
 	@Override

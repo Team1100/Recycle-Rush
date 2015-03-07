@@ -1,19 +1,21 @@
 package org.team1100;
 
-import org.team1100.commands.autonomous.AutonomousCommand;
+import org.team1100.commands.autonomous.AutoOneToteCommand;
+import org.team1100.commands.autonomous.AutoThreeToteDrivingCommand;
+import org.team1100.commands.drive.DriveCommand;
 import org.team1100.commands.manipulator.PickUpToteCommand;
 import org.team1100.commands.manipulator.elevator.ResetElevatorEncoderCommand;
 import org.team1100.commands.util.LogFileCommand;
+import org.team1100.subsystems.Arm;
 import org.team1100.subsystems.DriveTrain;
 import org.team1100.subsystems.Elevator;
 import org.team1100.subsystems.Intake;
 
-import com.ni.vision.VisionException;
-
-import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -27,40 +29,48 @@ public class Robot extends IterativeRobot {
 
 	public static LogFileCommand logFile;
 
-	private AutonomousCommand autoCommand;
+	private Command autoCommand;
 	private boolean isCameraConnected = true;
+
+	private SendableChooser autoChooser;
 
 	public void robotInit() {
 		OI.getInstance();
-		try {
-			//CameraServer.getInstance().startAutomaticCapture(RobotMap.CAMERA_NAME);
-			//MicrosoftCamera.getInstance().start();
-		} catch (VisionException ve) {
-			isCameraConnected = false;
-		} catch (Exception e) {
-			e.printStackTrace(System.err);
-			isCameraConnected = false;
-
-		}
-		SmartDashboard.putBoolean("Camera Connected: ", isCameraConnected);
+		/*
+		 * try {
+		 * CameraServer.getInstance().startAutomaticCapture(RobotMap.CAMERA_NAME
+		 * ); //MicrosoftCamera.getInstance().start(); } catch (VisionException
+		 * ve) { isCameraConnected = false; } catch (Exception e) {
+		 * e.printStackTrace(System.err); isCameraConnected = false;
+		 * 
+		 * } SmartDashboard.putBoolean("Camera Connected: ", isCameraConnected);
+		 */
 
 		SmartDashboard.putData(DriveTrain.getInstance());
 		SmartDashboard.putData(Elevator.getInstance());
 		SmartDashboard.putData(Intake.getInstance());
+		SmartDashboard.putData(Arm.getInstance());
 
 		SmartDashboard.putData(new ResetElevatorEncoderCommand());
 		SmartDashboard.putData(new PickUpToteCommand());
 
 		SmartDashboard.putData(Scheduler.getInstance());
 
-		autoCommand = new AutonomousCommand();
+		autoChooser = new SendableChooser();
+		autoChooser.addDefault("Drive Only", new DriveCommand(.7, .7, 2));
+		autoChooser.addObject("Pick Up 1 Tote", new AutoOneToteCommand());
+		autoChooser.addObject("Pick Up Two Totes", new AutoTwoToteCommand());
+		
 		logFile = new LogFileCommand();
 	}
 
 	private void log() {
+		SmartDashboard.putBoolean("Break", Elevator.getInstance().isBeamBroken());
+		SmartDashboard.putNumber("POT", Arm.getInstance().getPosition());
 	}
 
 	public void autonomousInit() {
+		autoCommand = (Command) autoChooser.getSelected();
 		autoCommand.start();
 		// logFile.start();
 	}
@@ -71,6 +81,7 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void teleopInit() {
+		autoCommand.cancel();
 		/*
 		 * if (!logFile.isRunning()) logFile.start();
 		 * 

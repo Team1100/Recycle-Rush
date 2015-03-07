@@ -2,6 +2,7 @@ package org.team1100.commands.manipulator.elevator;
 
 import org.team1100.subsystems.Elevator;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Command;
 
 public class MoveElevatorToTopCommand extends Command {
@@ -13,7 +14,7 @@ public class MoveElevatorToTopCommand extends Command {
 	@Override
 	protected void initialize() {
 		Elevator.getInstance().enable();
-		Elevator.getInstance().goToTop();
+		Elevator.getInstance().setSetpoint(Elevator.TOP_SETPOINT);
 	}
 
 	@Override

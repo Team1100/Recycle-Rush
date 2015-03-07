@@ -1,31 +1,25 @@
-package org.team1100.commands.manipulator.elevator;
-
-import org.team1100.subsystems.Elevator;
+package org.team1100.commands.autonomous;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class PullInPistonCommand extends Command{
+public class AutoTwoToteCommand extends Command{
 
-	private boolean isFinished = false;
-	
-	public PullInPistonCommand(){
-		requires(Elevator.getInstance());
-	}
-	
 	@Override
 	protected void initialize() {
+		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	protected void execute() {
-		Elevator.getInstance().pullInPiston();
-		isFinished = true;
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
 	protected boolean isFinished() {
-		return isFinished;
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	@Override

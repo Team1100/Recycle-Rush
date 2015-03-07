@@ -1,13 +1,14 @@
 package org.team1100.subsystems;
 
 import org.team1100.RobotMap;
+import org.team1100.commands.manipulator.intake.UserIntakeCommand;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Intake extends Subsystem {
 	private static Intake intake;
@@ -27,8 +28,7 @@ public class Intake extends Subsystem {
 	private Intake() {
 		victorLeft = new Victor(RobotMap.I_LEFT_MOTOR);
 		victorRight = new Victor(RobotMap.I_RIGHT_MOTOR);
-		solenoid = new DoubleSolenoid(RobotMap.PCM_ID, RobotMap.I_SOLENOID_A,
-				RobotMap.I_SOLENOID_B);
+		solenoid = new DoubleSolenoid(RobotMap.PCM_ID, RobotMap.I_SOLENOID_A, RobotMap.I_SOLENOID_B);
 		solenoid.set(Value.kOff);
 		LiveWindow.addActuator("Intake", "Left Victor", victorLeft);
 		LiveWindow.addActuator("Intake", "Right Victor", victorRight);
@@ -36,18 +36,15 @@ public class Intake extends Subsystem {
 	}
 
 	public void rollIn() {
-		victorLeft.set(1);
-		victorRight.set(1);
+		intake(1);
 	}
 
 	public void rollOut() {
-		victorLeft.set(-1);
-		victorRight.set(-1);
+		intake(-1);
 	}
 
 	public void stopIntake() {
-		victorLeft.set(0);
-		victorRight.set(0);
+		intake(0);
 	}
 
 	public void toggleIntake() {
@@ -59,8 +56,24 @@ public class Intake extends Subsystem {
 		intakeClamped = !intakeClamped;
 	}
 
+	public void intakeOut() {
+		solenoid.set(Value.kReverse);
+		intakeClamped = false;
+	}
+
+	public void intakeIn() {
+		solenoid.set(Value.kForward);
+		intakeClamped = true;
+	}
+
 	@Override
 	protected void initDefaultCommand() {
+		setDefaultCommand(new UserIntakeCommand());
+	}
+
+	public void intake(double speed){
+		victorLeft.set(speed);
+		victorRight.set(speed);
 
 	}
 

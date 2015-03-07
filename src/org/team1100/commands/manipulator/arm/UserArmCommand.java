@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.command.Command;
 public class UserArmCommand extends Command {
 
 	public UserArmCommand() {
-		requires(Arm.getInstatnce());
+		requires(Arm.getInstance());
 	}
 
 	@Override
@@ -19,8 +19,20 @@ public class UserArmCommand extends Command {
 
 	@Override
 	protected void execute() {
-		double speed = OI.getInstance().getXboxController().getAxis(XboxAxis.kYLeft);
-		Arm.getInstatnce().moveArm(speed);
+		int pov = OI.getInstance().getXboxController().getPOV(0);
+		if (pov != -1)
+			Arm.getInstance().enable();
+		if (pov == 270) {
+			// setpoint 1
+		} else if (pov == 0) {
+			// setpoint 2
+		} else if (pov == 90) {
+			// setpoint 3
+		} else {
+			Arm.getInstance().disable();
+			double speed = OI.getInstance().getXboxController().getAxis(XboxAxis.kYRight);
+			Arm.getInstance().moveArm(speed);
+		}
 	}
 
 	@Override
@@ -30,14 +42,12 @@ public class UserArmCommand extends Command {
 
 	@Override
 	protected void end() {
-		// TODO Auto-generated method stub
-
+		Arm.getInstance().disable();
 	}
 
 	@Override
 	protected void interrupted() {
-		// TODO Auto-generated method stub
-
+		end();
 	}
 
 }

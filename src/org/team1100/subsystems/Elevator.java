@@ -6,6 +6,7 @@ import org.team1100.commands.manipulator.elevator.UserElevatorCommand;
 import edu.wpi.first.wpilibj.CANTalon;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
@@ -18,18 +19,18 @@ import edu.wpi.first.wpilibj.tables.ITableListener;
 
 public class Elevator extends PIDSubsystem {
 
+	public static int TOP_SETPOINT = 8000; //9000
+	public static int DRIVING_HEIGHT = 2000; // TODO Find setpoint
+	public static int BOTTOM_SETPOINT = 0;
+
 	private static Elevator elevator;
 
 	private static final String topKey = "Elevator_Top";
-	private static final String platKey = "Elevator_Plat";
+	private static final String driveKey = "Elevator_Drive";
 	private static final String botKey = "Elevator_Bot";
 	private static final String pKey = "Elevator_P";
 	private static final String iKey = "Elevator_I";
 	private static final String dKey = "Elevator_D";
-
-	private static int TOP_SETPOINT = 9000;
-	private static int PLATFORM_SETPOINT = 0; // TODO Find setpoint
-	private static int BOTTOM_SETPOINT = 0;
 
 	private static double P = .001;
 	private static double I = 0;
@@ -38,40 +39,55 @@ public class Elevator extends PIDSubsystem {
 	public static Elevator getInstance() {
 		if (elevator == null)
 			elevator = new Elevator();
-		updatePreferences(elevator);
+		updatePreferences();
 		return elevator;
 	}
-	
-	public static void updatePreferences(Elevator elevaotr) {
+
+	public static void updatePreferences() {
 		P = Preferences.getInstance().getDouble(pKey, P);
 		I = Preferences.getInstance().getDouble(iKey, I);
 		D = Preferences.getInstance().getDouble(dKey, D);
-		elevaotr.getPIDController().setPID(P, I, D);
+		elevator.getPIDController().setPID(P, I, D);
 		TOP_SETPOINT = Preferences.getInstance().getInt(topKey, TOP_SETPOINT);
-		PLATFORM_SETPOINT = Preferences.getInstance().getInt(topKey, PLATFORM_SETPOINT);
-		BOTTOM_SETPOINT = Preferences.getInstance().getInt(topKey, BOTTOM_SETPOINT);
+		DRIVING_HEIGHT = Preferences.getInstance().getInt(driveKey, DRIVING_HEIGHT);
+		BOTTOM_SETPOINT = Preferences.getInstance().getInt(botKey, BOTTOM_SETPOINT);
 	}
 
 	private boolean encoderReset = false;
+	private boolean isBeamBroken = false;
 	private ElevatorDrive elevatorDrive;
 	private Encoder encoder;
 	private DigitalInput beamBreak;
 	private DigitalInput infraredSensorBack;
 	private DigitalInput infraredSensorFront;
-	private DoubleSolenoid pushingPiston;
+	private Thread beamBreakThread;
 
 	private Elevator() {
 		super(P, I, D);
-		this.getPIDController().setContinuous();
 		elevatorDrive = new ElevatorDrive(RobotMap.E_ELEVATOR_CIM_1, RobotMap.E_ELEVATOR_CIM_2);
 
 		encoder = new Encoder(RobotMap.E_ENCODER_A, RobotMap.E_ENCODER_B);
+		encoder.setReverseDirection(true);
 		beamBreak = new DigitalInput(RobotMap.E_BEAM_BREAK);
 		infraredSensorBack = new DigitalInput(RobotMap.E_INFRARED_SENSOR_BACK);
 		infraredSensorFront = new DigitalInput(RobotMap.E_INFRARED_SENSOR_FRONT);
-		pushingPiston = new DoubleSolenoid(RobotMap.PCM_ID, RobotMap.E_PUSHING_PISTON_A,RobotMap.E_PUSHING_PISTON_B);
+		beamBreakThread = new Thread() {
 
-		pushingPiston.set(Value.kReverse);
+			@Override
+			public void run() {
+				while (true) {
+					if (!beamBreak.get() && !isBeamBroken)
+						isBeamBroken = true;
+					// SmartDashboard.putBoolean("Beam Break", isBeamBroken);
+					try {
+						Thread.sleep(10);
+					} catch (InterruptedException e) {
+						// DriverStation.reportError(e.getMessage(), true);
+					}
+				}
+			}
+		};
+		beamBreakThread.start();
 		setAbsoluteTolerance(250);
 
 		LiveWindow.addActuator("Elevator", "Encoder", encoder);
@@ -80,19 +96,22 @@ public class Elevator extends PIDSubsystem {
 		LiveWindow.addSensor("Elevator", "Infrared Sensor", infraredSensorFront);
 		LiveWindow.addSensor("Elevator", "PID Controller", getPIDController());
 		LiveWindow.addActuator("Elevator", "Elevator Drive", elevatorDrive);
-		LiveWindow.addActuator("Elevator", "Pushing Piston", pushingPiston);
 
 		Preferences.getInstance().putDouble(pKey, P);
 		Preferences.getInstance().putDouble(iKey, I);
 		Preferences.getInstance().putDouble(dKey, D);
 		Preferences.getInstance().putInt(topKey, TOP_SETPOINT);
-		Preferences.getInstance().putInt(platKey, PLATFORM_SETPOINT);
+		Preferences.getInstance().putInt(driveKey, DRIVING_HEIGHT);
 		Preferences.getInstance().putInt(botKey, BOTTOM_SETPOINT);
 	}
 
 	public void lift(double speed) {
-		if (!beamBreak.get() && speed < 0)
+		if (isBeamBroken && speed < 0)
 			speed = 0;
+		if (speed > 0 && isBeamBroken)
+			isBeamBroken = false;
+		SmartDashboard.putNumber("Encoder", getPosition());
+		SmartDashboard.putBoolean("Tote In", isToteInElevator());
 		elevatorDrive.lift(speed);
 	}
 
@@ -114,18 +133,18 @@ public class Elevator extends PIDSubsystem {
 	}
 
 	/**
-	 * Default: true
+	 * Default: false
 	 */
-	public boolean getBeamBreak() {
-		return beamBreak.get();
+	public boolean isBeamBroken() {
+		return isBeamBroken;
 	}
 
 	public boolean isToteInElevator() {
 		return !infraredSensorBack.get();
 	}
 
-	public boolean isToteOutOfElevator() {
-		return infraredSensorFront.get();
+	public boolean isFrontBeamBroken() {
+		return !infraredSensorFront.get();
 	}
 
 	@Override
@@ -138,33 +157,12 @@ public class Elevator extends PIDSubsystem {
 		lift(output);
 	}
 
-	public void goToBottom() {
-		setSetpoint(BOTTOM_SETPOINT);
-	}
-
-	public void goToTop() {
-		setSetpoint(TOP_SETPOINT);
-	}
-
-	public void goToPlatformHeigh() {
-		setSetpoint(PLATFORM_SETPOINT);
-	}
-	
-	public void pushOutPiston(){
-		pushingPiston.set(Value.kForward);
-	}
-	
-	public void pullInPiston(){
-		pushingPiston.set(Value.kReverse);
-	}
-
-
 	@Override
 	protected void initDefaultCommand() {
 		setDefaultCommand(new UserElevatorCommand());
 	}
 
-	class ElevatorDrive implements LiveWindowSendable {
+	private class ElevatorDrive implements LiveWindowSendable {
 
 		private CANTalon talon1;
 		private CANTalon talon2;
@@ -224,8 +222,7 @@ public class Elevator extends PIDSubsystem {
 		public void lift(double speed) {
 			talon1.set(-speed);
 			talon2.set(-speed);
-			SmartDashboard.putNumber("Talon Current",
-					talon1.getOutputCurrent() + talon2.getOutputCurrent());
+
 		}
 
 	}

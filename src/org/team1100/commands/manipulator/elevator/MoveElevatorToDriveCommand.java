@@ -1,39 +1,38 @@
-package org.team1100.commands.manipulator;
+package org.team1100.commands.manipulator.elevator;
 
 import org.team1100.subsystems.Elevator;
-import org.team1100.subsystems.Intake;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class RollOutToteCommand extends Command {
-
-	public RollOutToteCommand() {
-		requires(Intake.getInstance());
+public class MoveElevatorToDriveCommand extends Command {
+	
+	public MoveElevatorToDriveCommand() {
 		requires(Elevator.getInstance());
 	}
 
 	@Override
 	protected void initialize() {
+		Elevator.getInstance().enable();
+		Elevator.getInstance().setSetpoint(Elevator.DRIVING_HEIGHT);
 	}
 
 	@Override
 	protected void execute() {
-		Intake.getInstance().rollOut();
 	}
 
 	@Override
 	protected boolean isFinished() {
-		return !Elevator.getInstance().isFrontBeamBroken();
+		return Elevator.getInstance().onTarget();
 	}
 
 	@Override
 	protected void end() {
-
+		Elevator.getInstance().disable();
 	}
 
 	@Override
 	protected void interrupted() {
-
+		end();
 	}
 
 }

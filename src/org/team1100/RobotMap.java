@@ -94,8 +94,6 @@ public class RobotMap {
 	public static final int E_BEAM_BREAK = DIO_2;
 	public static final int E_INFRARED_SENSOR_BACK = DIO_3;
 	public static final int E_INFRARED_SENSOR_FRONT = DIO_4;
-	public static final int E_PUSHING_PISTON_A = PNEUMATIC_2;
-	public static final int E_PUSHING_PISTON_B = PNEUMATIC_3;
 
 	// [I]ntake
 	public static final int I_LEFT_MOTOR = PWM_4;
@@ -106,6 +104,9 @@ public class RobotMap {
 	// [A]rm
 	public static final int A_LEFT_MOTOR = PWM_2; 
 	public static final int A_RIGHT_MOTOR = PWM_3; 
-	public static final int A_ENCODER_A = DIO_5;
-	public static final int A_ENCODER_B = DIO_6;
+	public static final int A_POTENTIOMETER = ANALOG_IN_0;
+	public static final int A_GRIPPER_SOLENOID_A = PNEUMATIC_4;
+	public static final int A_GRIPPER_SOLENOID_B = PNEUMATIC_5;
+	public static final int A_CLAW_ROTATE_SOLENOID_B = PNEUMATIC_2;
+	public static final int A_CLAW_ROTATE_SOLENOID_A = PNEUMATIC_3;
 }
