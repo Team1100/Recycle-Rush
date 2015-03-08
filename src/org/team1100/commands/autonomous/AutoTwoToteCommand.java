@@ -1,37 +1,20 @@
 package org.team1100.commands.autonomous;
 
-import edu.wpi.first.wpilibj.command.Command;
+import org.team1100.commands.drive.DriveCommand;
+import org.team1100.commands.drive.TurnRightCommand;
+import org.team1100.commands.manipulator.PickUpToteCommand;
+import org.team1100.commands.manipulator.arm.PickUpContainerCommand;
 
-public class AutoTwoToteCommand extends Command{
+import edu.wpi.first.wpilibj.command.CommandGroup;
 
-	@Override
-	protected void initialize() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	protected void execute() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	protected boolean isFinished() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	protected void end() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	protected void interrupted() {
-		// TODO Auto-generated method stub
-		
+public class AutoTwoToteCommand extends CommandGroup {
+	public AutoTwoToteCommand() {
+		addParallel(new PickUpContainerCommand());
+		addSequential(new FirstTotePickUpCommand());
+		addParallel(new DriveCommand(.52, .6, 4));
+		addSequential(new PickUpToteCommand());
+		addSequential(new TurnRightCommand());
+		addSequential(new DriveCommand(.52, .6, 2));
 	}
 
 }

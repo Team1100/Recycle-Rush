@@ -8,8 +8,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Hashtable;
 
-import org.team1100.Robot;
-
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.buttons.Trigger;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
@@ -46,6 +46,7 @@ public class LogFileCommand extends Command {
 		try {
 			writer = new PrintWriter(logFile);
 		} catch (FileNotFoundException e) {
+			DriverStation.reportError(e.getMessage(), true);
 			isWorking = false;
 		}
 
@@ -78,6 +79,7 @@ public class LogFileCommand extends Command {
 	}
 
 	protected void end() {
+		if (writer != null)
 		writer.close();
 	}
 

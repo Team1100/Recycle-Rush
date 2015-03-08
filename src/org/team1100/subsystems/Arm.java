@@ -48,7 +48,7 @@ public class Arm extends PIDSubsystem {
 	private DoubleSolenoid clawRotateSolenoid;
 	private AnalogPotentiometer pot;
 
-	private boolean isGripperToggled;
+	private boolean isGripperClamped;
 	private boolean isClawRotated;
 
 	private Arm() {
@@ -62,10 +62,10 @@ public class Arm extends PIDSubsystem {
 		gripperSolenoid = new DoubleSolenoid(RobotMap.PCM_ID, RobotMap.A_GRIPPER_SOLENOID_A, RobotMap.A_GRIPPER_SOLENOID_B);
 		clawRotateSolenoid = new DoubleSolenoid(RobotMap.PCM_ID, RobotMap.A_CLAW_ROTATE_SOLENOID_A, RobotMap.A_CLAW_ROTATE_SOLENOID_B);
 
-		gripperSolenoid.set(Value.kForward);
+		gripperSolenoid.set(Value.kReverse);
 		clawRotateSolenoid.set(Value.kReverse);
 
-		isGripperToggled = true;
+		isGripperClamped = false;
 		isClawRotated = false;
 
 		LiveWindow.addActuator("Arm", "Potentiometer", pot);
@@ -96,18 +96,32 @@ public class Arm extends PIDSubsystem {
 	}
 
 	public void toggleGripper() {
-		if (isGripperToggled)
-			gripperSolenoid.set(Value.kForward);
-		else
+		if (isGripperClamped)
 			gripperSolenoid.set(Value.kReverse);
-		isGripperToggled = !isGripperToggled;
+		else
+			gripperSolenoid.set(Value.kForward);
+		isGripperClamped = !isGripperClamped;
+	}
+
+	public void clampGripper() {
+		if (!isGripperClamped) {
+			gripperSolenoid.set(Value.kForward);
+			isGripperClamped = true;
+		}
+	}
+
+	public void unclampGripper() {
+		if (isGripperClamped) {
+			gripperSolenoid.set(Value.kReverse);
+			isGripperClamped = false;
+		}
 	}
 
 	public void toggleRotateClaw() {
 		if (isClawRotated)
-			clawRotateSolenoid.set(Value.kForward);
-		else
 			clawRotateSolenoid.set(Value.kReverse);
+		else
+			clawRotateSolenoid.set(Value.kForward);
 		isClawRotated = !isClawRotated;
 	}
 

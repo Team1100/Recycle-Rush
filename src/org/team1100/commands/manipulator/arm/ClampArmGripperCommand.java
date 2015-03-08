@@ -1,28 +1,24 @@
-package org.team1100.commands.autonomous;
+package org.team1100.commands.manipulator.arm;
 
-import org.team1100.subsystems.Elevator;
-import org.team1100.subsystems.Intake;
+import org.team1100.subsystems.Arm;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class AutoResetCommand extends Command{
+public class ClampArmGripperCommand extends Command {
 
 	private boolean isFinished = false;
-	
-	public AutoResetCommand(){
-		requires(Elevator.getInstance());
-		requires(Intake.getInstance());
+
+	public ClampArmGripperCommand() {
+		requires(Arm.getInstance());
 	}
-	
+
 	@Override
 	protected void initialize() {
-		
 	}
 
 	@Override
 	protected void execute() {
-		Elevator.getInstance().resetEncoder();
-		Intake.getInstance().intakeOut();
+		Arm.getInstance().clampGripper();
 		isFinished = true;
 	}
 
@@ -34,13 +30,13 @@ public class AutoResetCommand extends Command{
 	@Override
 	protected void end() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	protected void interrupted() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

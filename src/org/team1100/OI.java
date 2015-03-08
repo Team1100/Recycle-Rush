@@ -4,8 +4,6 @@ import org.team1100.commands.manipulator.PickUpToteCommand;
 import org.team1100.commands.manipulator.ScoreTotesCommand;
 import org.team1100.commands.manipulator.arm.ToggleArmGripperCommand;
 import org.team1100.commands.manipulator.arm.ToggleClawRotateCommand;
-import org.team1100.commands.manipulator.elevator.MoveElevatorToBottomCommand;
-import org.team1100.commands.manipulator.elevator.MoveElevatorToDriveCommand;
 import org.team1100.commands.manipulator.elevator.ResetElevatorEncoderCommand;
 import org.team1100.commands.manipulator.intake.ToggleIntakeCommand;
 import org.team1100.input.AttackThree;
@@ -43,6 +41,9 @@ public class OI {
 		xbox.getButtonX().toggleWhenPressed(new ScoreTotesCommand());
 		xbox.getButtonB().toggleWhenPressed(new PickUpToteCommand());
 		xbox.getButtonBack().whenPressed(new ResetElevatorEncoderCommand());
+		
+		
+		//xbox.getButtonLeftStick().whenPressed(new TurnCommand(true));
 	}
 
 	/**

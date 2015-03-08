@@ -7,15 +7,23 @@ import org.team1100.commands.manipulator.intake.CloseIntakeCommand;
 import org.team1100.commands.manipulator.intake.OpenIntakeCommand;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import edu.wpi.first.wpilibj.command.WaitCommand;
 
 public class PickUpToteCommand extends CommandGroup {
 	public PickUpToteCommand() {
+		this(true);
+	}
+
+	public PickUpToteCommand(boolean moveUp) {
+
 		addSequential(new OpenIntakeCommand());
-		addSequential(new MoveElevatorToTopCommand());
+		if (moveUp)
+			addSequential(new MoveElevatorToTopCommand());
 		addSequential(new StartRollInCommand());
 		addSequential(new CloseIntakeCommand());
 		addSequential(new RollInToteCommand());
 		addSequential(new MoveElevatorToBottomCommand());
+		addSequential(new WaitCommand(.25));
 		addSequential(new MoveElevatorToDriveCommand());
 	}
 }

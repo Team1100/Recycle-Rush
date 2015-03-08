@@ -20,7 +20,7 @@ import edu.wpi.first.wpilibj.tables.ITableListener;
 public class Elevator extends PIDSubsystem {
 
 	public static int TOP_SETPOINT = 8000; //9000
-	public static int DRIVING_HEIGHT = 2000; // TODO Find setpoint
+	public static int DRIVING_HEIGHT = 2500; // TODO Find setpoint
 	public static int BOTTOM_SETPOINT = 0;
 
 	private static Elevator elevator;

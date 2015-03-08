@@ -1,10 +1,9 @@
 package org.team1100;
 
 import org.team1100.commands.autonomous.AutoOneToteCommand;
-import org.team1100.commands.autonomous.AutoThreeToteDrivingCommand;
+import org.team1100.commands.autonomous.AutoTwoToteCommand;
 import org.team1100.commands.drive.DriveCommand;
-import org.team1100.commands.manipulator.PickUpToteCommand;
-import org.team1100.commands.manipulator.elevator.ResetElevatorEncoderCommand;
+import org.team1100.commands.drive.TurnRightCommand;
 import org.team1100.commands.util.LogFileCommand;
 import org.team1100.subsystems.Arm;
 import org.team1100.subsystems.DriveTrain;
@@ -51,28 +50,30 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putData(Intake.getInstance());
 		SmartDashboard.putData(Arm.getInstance());
 
-		SmartDashboard.putData(new ResetElevatorEncoderCommand());
-		SmartDashboard.putData(new PickUpToteCommand());
-
 		SmartDashboard.putData(Scheduler.getInstance());
+		
+		SmartDashboard.putData(new TurnRightCommand());
 
 		autoChooser = new SendableChooser();
 		autoChooser.addDefault("Drive Only", new DriveCommand(.7, .7, 2));
 		autoChooser.addObject("Pick Up 1 Tote", new AutoOneToteCommand());
-		autoChooser.addObject("Pick Up Two Totes", new AutoTwoToteCommand());
-		
+		autoChooser.addObject("Pick Up 2 Totes", new AutoTwoToteCommand());
+
+		SmartDashboard.putData("Autonomous", autoChooser);
+
 		logFile = new LogFileCommand();
 	}
 
 	private void log() {
-		SmartDashboard.putBoolean("Break", Elevator.getInstance().isBeamBroken());
 		SmartDashboard.putNumber("POT", Arm.getInstance().getPosition());
+		logFile.putNumber("POT", Arm.getInstance().getPosition());
 	}
 
 	public void autonomousInit() {
 		autoCommand = (Command) autoChooser.getSelected();
 		autoCommand.start();
-		// logFile.start();
+		if (!logFile.isRunning())
+			logFile.start();
 	}
 
 	public void autonomousPeriodic() {
@@ -81,7 +82,10 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void teleopInit() {
-		autoCommand.cancel();
+		if (autoCommand != null)
+			autoCommand.cancel();
+		if (!logFile.isRunning())
+			logFile.start();
 		/*
 		 * if (!logFile.isRunning()) logFile.start();
 		 * 
