@@ -1,7 +1,7 @@
 package org.team1100.subsystems;
 
 import org.team1100.RobotMap;
-import org.team1100.commands.drive.UserDriveCommand;
+import org.team1100.commands.drive.UserDrive;
 
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.Victor;
@@ -50,7 +50,7 @@ public class DriveTrain extends Subsystem {
 	 * is used when no other commands are using the subsystem
 	 */
 	public void initDefaultCommand() {
-		setDefaultCommand(new UserDriveCommand());
+		setDefaultCommand(new UserDrive());
 	}
 
 }

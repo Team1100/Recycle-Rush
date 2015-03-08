@@ -4,39 +4,32 @@ import org.team1100.subsystems.Arm;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class ToggleArmGripperCommand extends Command{
+public class ToggleRotateArmClaw extends Command {
 
-	private boolean isFinished = false;
-	
-	public ToggleArmGripperCommand(){
+	public ToggleRotateArmClaw() {
 		requires(Arm.getInstance());
 	}
-	
+
 	@Override
 	protected void initialize() {
 	}
 
 	@Override
 	protected void execute() {
-		Arm.getInstance().toggleGripper();
-		isFinished = true;
+		Arm.getInstance().toggleRotateClaw();
 	}
 
 	@Override
 	protected boolean isFinished() {
-		return isFinished;
+		return true;
 	}
 
 	@Override
 	protected void end() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	protected void interrupted() {
-		// TODO Auto-generated method stub
-		
 	}
 
 }

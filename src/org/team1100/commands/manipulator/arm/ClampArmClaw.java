@@ -4,11 +4,9 @@ import org.team1100.subsystems.Arm;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class ClampArmGripperCommand extends Command {
+public class ClampArmClaw extends Command {
 
-	private boolean isFinished = false;
-
-	public ClampArmGripperCommand() {
+	public ClampArmClaw() {
 		requires(Arm.getInstance());
 	}
 
@@ -19,24 +17,19 @@ public class ClampArmGripperCommand extends Command {
 	@Override
 	protected void execute() {
 		Arm.getInstance().clampGripper();
-		isFinished = true;
 	}
 
 	@Override
 	protected boolean isFinished() {
-		return isFinished;
+		return true;
 	}
 
 	@Override
 	protected void end() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	protected void interrupted() {
-		// TODO Auto-generated method stub
-
 	}
 
 }

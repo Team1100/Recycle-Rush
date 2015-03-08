@@ -1,14 +1,12 @@
-package org.team1100.commands.drive;
+package org.team1100.commands.manipulator.arm;
 
-import org.team1100.Robot;
-import org.team1100.subsystems.DriveTrain;
+import org.team1100.subsystems.Arm;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class DriveCommand extends Command {
+public class MoveArm extends Command {
 
-	private double leftValue;
-	private double rightValue;
+	private double speed;
 	private double timeout;
 
 	/**
@@ -18,21 +16,20 @@ public class DriveCommand extends Command {
 	 * @param rightValue the value of the right side, from -1 to 1
 	 * @param timeout how long the command should run, in seconds
 	 */
-	public DriveCommand(double leftValue, double rightValue, double timeout) {
-		requires(DriveTrain.getInstance());
-		this.leftValue = leftValue;
-		this.rightValue = rightValue;
+	public MoveArm(double speed, double timeout) {
+		requires(Arm.getInstance());
+		this.speed = speed;
 		this.timeout = timeout;
 	}
 
 	@Override
 	protected void initialize() {
 		setTimeout(timeout);
+		Arm.getInstance().moveArm(speed);
 	}
 
 	@Override
 	protected void execute() {
-		DriveTrain.getInstance().driveTank(leftValue, rightValue);
 	}
 
 	@Override
@@ -42,10 +39,12 @@ public class DriveCommand extends Command {
 
 	@Override
 	protected void end() {
+		Arm.getInstance().moveArm(0);
 	}
 
 	@Override
 	protected void interrupted() {
+		end();
 	}
 
 }

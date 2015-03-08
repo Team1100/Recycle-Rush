@@ -1,38 +1,39 @@
-package org.team1100.commands.manipulator.intake;
+package org.team1100.commands.manipulator;
 
+import org.team1100.subsystems.Elevator;
 import org.team1100.subsystems.Intake;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class RollInCommand extends Command{
+public class RollOutTote extends Command {
 
-	public RollInCommand(){
+	public RollOutTote() {
 		requires(Intake.getInstance());
+		requires(Elevator.getInstance());
 	}
-	
+
 	@Override
 	protected void initialize() {
-		
+		Intake.getInstance().rollOut();
 	}
 
 	@Override
 	protected void execute() {
-		Intake.getInstance().rollIn();
 	}
 
 	@Override
 	protected boolean isFinished() {
-		return false;
+		return !Elevator.getInstance().isToteInIntake();
 	}
 
 	@Override
 	protected void end() {
-		Intake.getInstance().stopIntake();
+
 	}
 
 	@Override
 	protected void interrupted() {
-		end();
+
 	}
-	
+
 }

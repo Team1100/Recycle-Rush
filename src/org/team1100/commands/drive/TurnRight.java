@@ -5,13 +5,13 @@ import org.team1100.subsystems.DriveTrain;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.command.Command;
 
-public class TurnRightCommand extends Command {
+public class TurnRight extends Command {
 
 	private double leftSpeed = 1;
 	private double rightSpeed = 0;
 	private double waitTime = 3;
 
-	public TurnRightCommand() {
+	public TurnRight() {
 		requires(DriveTrain.getInstance());
 		Preferences.getInstance().putDouble("LeftSpeed", 1);
 		Preferences.getInstance().putDouble("RightSpeed", 0);
@@ -39,14 +39,10 @@ public class TurnRightCommand extends Command {
 
 	@Override
 	protected void end() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	protected void interrupted() {
-		// TODO Auto-generated method stub
-
 	}
 
 }

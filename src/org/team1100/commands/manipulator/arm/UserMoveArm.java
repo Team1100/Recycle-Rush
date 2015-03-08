@@ -6,15 +6,14 @@ import org.team1100.subsystems.Arm;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class UserArmCommand extends Command {
+public class UserMoveArm extends Command {
 
-	public UserArmCommand() {
+	public UserMoveArm() {
 		requires(Arm.getInstance());
 	}
 
 	@Override
 	protected void initialize() {
-
 	}
 
 	@Override

@@ -6,15 +6,14 @@ import org.team1100.subsystems.Intake;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class UserIntakeCommand extends Command{
+public class UserSpinIntake extends Command {
 
-	public UserIntakeCommand(){
+	public UserSpinIntake() {
 		requires(Intake.getInstance());
 	}
-	
+
 	@Override
 	protected void initialize() {
-		
 	}
 
 	@Override
@@ -22,7 +21,6 @@ public class UserIntakeCommand extends Command{
 		double speedLeft = -OI.getInstance().getXboxController().getAxis(XboxAxis.kLeftTrigger);
 		double speedRight = OI.getInstance().getXboxController().getAxis(XboxAxis.kRightTrigger);
 		Intake.getInstance().intake(speedLeft + speedRight);
-		
 	}
 
 	@Override

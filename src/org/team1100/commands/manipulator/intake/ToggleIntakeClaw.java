@@ -4,32 +4,29 @@ import org.team1100.subsystems.Intake;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class OpenIntakeCommand extends Command {
+public class ToggleIntakeClaw extends Command {
 
-	boolean isFinished;
-	
-	public OpenIntakeCommand() {
+	public ToggleIntakeClaw() {
 		requires(Intake.getInstance());
 	}
 
 	@Override
 	protected void initialize() {
-		isFinished = false;
 	}
 
 	@Override
 	protected void execute() {
-		Intake.getInstance().intakeOut();
-		isFinished = true;
+		Intake.getInstance().toggleClaw();
 	}
 
 	@Override
 	protected boolean isFinished() {
-		return isFinished;
+		return true;
 	}
 
 	@Override
 	protected void end() {
+
 	}
 
 	@Override

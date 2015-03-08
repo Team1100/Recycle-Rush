@@ -1,26 +1,24 @@
-package org.team1100.commands.manipulator.intake;
+package org.team1100.commands.manipulator.arm;
 
-import org.team1100.subsystems.Intake;
+import org.team1100.subsystems.Arm;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class ToggleIntakeCommand extends Command{
+public class ToggleArmClaw extends Command{
 
-	boolean isFinished;
+	private boolean isFinished = false;
 	
-	public ToggleIntakeCommand(){
-		requires(Intake.getInstance());
-		isFinished = false;
+	public ToggleArmClaw(){
+		requires(Arm.getInstance());
 	}
 	
 	@Override
 	protected void initialize() {
-		
 	}
 
 	@Override
 	protected void execute() {
-		Intake.getInstance().toggleIntake();
+		Arm.getInstance().toggleGripper();
 		isFinished = true;
 	}
 
@@ -31,12 +29,10 @@ public class ToggleIntakeCommand extends Command{
 
 	@Override
 	protected void end() {
-		
 	}
 
 	@Override
 	protected void interrupted() {
-		
 	}
 
 }

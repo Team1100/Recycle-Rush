@@ -1,7 +1,7 @@
 package org.team1100.subsystems;
 
 import org.team1100.RobotMap;
-import org.team1100.commands.manipulator.arm.UserArmCommand;
+import org.team1100.commands.manipulator.arm.UserMoveArm;
 
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -9,16 +9,16 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
-import edu.wpi.first.wpilibj.interfaces.Potentiometer;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Arm extends PIDSubsystem {
 
 	public static Arm arm;
 
-	private static final String pKey = "Arm_P";
-	private static final String iKey = "Arm_I";
-	private static final String dKey = "Arm_D";
+	private static final String pKey = "ArmP";
+	private static final String iKey = "ArmI";
+	private static final String dKey = "ArmD";
 
 	private static double P = 0;
 	private static double I = 0;
@@ -81,15 +81,6 @@ public class Arm extends PIDSubsystem {
 		Preferences.getInstance().putDouble(dKey, D);
 	}
 
-	@Override
-	protected double returnPIDInput() {
-		return getPosition();
-	}
-
-	public double getPosition() {
-		return pot.get();
-	}
-
 	public void moveArm(double speed) {
 		talonLeft.set(speed);
 		talonRight.set(-speed);
@@ -126,12 +117,21 @@ public class Arm extends PIDSubsystem {
 	}
 
 	@Override
+	protected double returnPIDInput() {
+		return pot.get();
+	}
+
+	@Override
 	protected void usePIDOutput(double output) {
 		moveArm(output);
 	}
 
 	@Override
 	protected void initDefaultCommand() {
-		setDefaultCommand(new UserArmCommand());
+		setDefaultCommand(new UserMoveArm());
+	}
+
+	public void log() {
+		SmartDashboard.putNumber("POT", pot.get());
 	}
 }

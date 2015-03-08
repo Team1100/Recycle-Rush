@@ -2,19 +2,18 @@ package org.team1100.commands.manipulator.elevator;
 
 import org.team1100.subsystems.Elevator;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Command;
 
-public class MoveElevatorToTopCommand extends Command {
-	
-	public MoveElevatorToTopCommand(){
+public class ResetElevatorEncoder extends Command {
+
+	public ResetElevatorEncoder() {
 		requires(Elevator.getInstance());
 	}
-	
+
 	@Override
 	protected void initialize() {
-		Elevator.getInstance().enable();
-		Elevator.getInstance().setSetpoint(Elevator.TOP_SETPOINT);
+		Elevator.getInstance().resetCounter();
+		Elevator.getInstance().lift(-.6);
 	}
 
 	@Override
@@ -23,12 +22,13 @@ public class MoveElevatorToTopCommand extends Command {
 
 	@Override
 	protected boolean isFinished() {
-		return Elevator.getInstance().onTarget();
+		return Elevator.getInstance().isBeamBroken();
 	}
 
 	@Override
 	protected void end() {
-		Elevator.getInstance().disable();
+		Elevator.getInstance().lift(0);
+		Elevator.getInstance().resetEncoder();
 	}
 
 	@Override

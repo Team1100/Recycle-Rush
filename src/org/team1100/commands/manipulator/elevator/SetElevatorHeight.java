@@ -2,20 +2,21 @@ package org.team1100.commands.manipulator.elevator;
 
 import org.team1100.subsystems.Elevator;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class MoveElevatorToBottomCommand extends Command {
-	
-	public MoveElevatorToBottomCommand(){
+public class SetElevatorHeight extends Command {
+
+	private int setpoint;
+
+	public SetElevatorHeight(int height) {
 		requires(Elevator.getInstance());
+		setpoint = height;
 	}
-	
+
 	@Override
 	protected void initialize() {
 		Elevator.getInstance().enable();
-		Elevator.getInstance().setSetpoint(Elevator.BOTTOM_SETPOINT);
+		Elevator.getInstance().setSetpoint(setpoint);
 	}
 
 	@Override

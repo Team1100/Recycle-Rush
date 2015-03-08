@@ -7,18 +7,18 @@ import org.team1100.subsystems.Elevator;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.command.Command;
 
-public class UserElevatorCommand extends Command {
+public class UserMoveElevator extends Command {
 
 	private static double SPEED_PERCENT = 0.8;
 	private static final String KEY_NAME = "Lift_Speed_Percent";
 
-	public UserElevatorCommand() {
+	public UserMoveElevator() {
 		requires(Elevator.getInstance());
+		Preferences.getInstance().putDouble(KEY_NAME, SPEED_PERCENT);
 	}
 
 	@Override
 	protected void initialize() {
-		Preferences.getInstance().putDouble(KEY_NAME, SPEED_PERCENT);
 	}
 
 	@Override
@@ -36,6 +36,7 @@ public class UserElevatorCommand extends Command {
 
 	@Override
 	protected void end() {
+		Elevator.getInstance().lift(0);
 	}
 
 	@Override

@@ -1,11 +1,11 @@
 package org.team1100;
 
-import org.team1100.commands.manipulator.PickUpToteCommand;
-import org.team1100.commands.manipulator.ScoreTotesCommand;
-import org.team1100.commands.manipulator.arm.ToggleArmGripperCommand;
-import org.team1100.commands.manipulator.arm.ToggleClawRotateCommand;
-import org.team1100.commands.manipulator.elevator.ResetElevatorEncoderCommand;
-import org.team1100.commands.manipulator.intake.ToggleIntakeCommand;
+import org.team1100.commands.manipulator.PickUpTote;
+import org.team1100.commands.manipulator.ScoreTotes;
+import org.team1100.commands.manipulator.arm.ToggleArmClaw;
+import org.team1100.commands.manipulator.arm.ToggleRotateArmClaw;
+import org.team1100.commands.manipulator.elevator.ResetElevatorEncoder;
+import org.team1100.commands.manipulator.intake.ToggleIntakeClaw;
 import org.team1100.input.AttackThree;
 import org.team1100.input.LaunchpadController;
 import org.team1100.input.XboxController;
@@ -15,15 +15,15 @@ import org.team1100.input.XboxController;
  * interface to the commands and command groups that allow control of the robot.
  */
 public class OI {
-	
+
 	public static OI oi;
-	
-	public static OI getInstance(){
+
+	public static OI getInstance() {
 		if (oi == null)
 			oi = new OI();
 		return oi;
 	}
-	
+
 	private AttackThree rightStick;
 	private AttackThree leftStick;
 	private XboxController xbox;
@@ -35,42 +35,39 @@ public class OI {
 		xbox = new XboxController(RobotMap.C_XBOX_CONTROLLER, 0.2);
 		launchPad = new LaunchpadController(RobotMap.C_LAUNCHPAD_CONTROLLER);
 
-		xbox.getButtonLeftBumper().whenPressed(new ToggleArmGripperCommand());
-		xbox.getButtonRightBumper().whenPressed(new ToggleIntakeCommand());
-		xbox.getButtonA().whenPressed(new ToggleClawRotateCommand());
-		xbox.getButtonX().toggleWhenPressed(new ScoreTotesCommand());
-		xbox.getButtonB().toggleWhenPressed(new PickUpToteCommand());
-		xbox.getButtonBack().whenPressed(new ResetElevatorEncoderCommand());
-		
-		
-		//xbox.getButtonLeftStick().whenPressed(new TurnCommand(true));
+		xbox.getButtonLeftBumper().whenPressed(new ToggleArmClaw());
+		xbox.getButtonRightBumper().whenPressed(new ToggleIntakeClaw());
+		xbox.getButtonA().whenPressed(new ToggleRotateArmClaw());
+		xbox.getButtonX().toggleWhenPressed(new ScoreTotes());
+		xbox.getButtonB().toggleWhenPressed(new PickUpTote());
+		xbox.getButtonBack().whenPressed(new ResetElevatorEncoder());
 	}
 
 	/**
-	 * Returns the instance of the Right JoyStick to be able to get the value of
+	 * Returns the instance of the right {@link AttackThree AttackThree Joystick} to be able to get the value of
 	 * the axis' and to test whether a button is pressed
 	 * 
-	 * @return the instance of the Right JoyStick
+	 * @return the instance of the right {@link AttackThree AttackThree Joystick}
 	 */
 	public AttackThree getRightJoystick() {
 		return rightStick;
 	}
 
 	/**
-	 * Returns the instance of the Left JoyStick to be able to get the value of
+	 * Returns the instance of the left {@link AttackThree AttackThree Joystick} to be able to get the value of
 	 * the axis' and to test whether a button is pressed
 	 * 
-	 * @return the instance of the Left JoyStick
+	 * @return the instance of the left {@link AttackThree AttackThree Joystick}
 	 */
 	public AttackThree getLeftJoystick() {
 		return leftStick;
 	}
 
 	/**
-	 * Returns the instance of the XBOX Controller to be able to get the value
+	 * Returns the instance of the {@link XboxController} to be able to get the value
 	 * of the axis' and to test whether a button is pressed
 	 * 
-	 * @return the instance of the XBOX Controller
+	 * @return the instance of the {@link XboxController}
 	 */
 	public XboxController getXboxController() {
 		return xbox;

@@ -2,14 +2,14 @@ package org.team1100;
 
 import org.team1100.commands.autonomous.AutoOneToteCommand;
 import org.team1100.commands.autonomous.AutoTwoToteCommand;
-import org.team1100.commands.drive.DriveCommand;
-import org.team1100.commands.drive.TurnRightCommand;
+import org.team1100.commands.drive.Drive;
 import org.team1100.commands.util.LogFileCommand;
 import org.team1100.subsystems.Arm;
 import org.team1100.subsystems.DriveTrain;
 import org.team1100.subsystems.Elevator;
 import org.team1100.subsystems.Intake;
 
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -29,12 +29,14 @@ public class Robot extends IterativeRobot {
 	public static LogFileCommand logFile;
 
 	private Command autoCommand;
-	private boolean isCameraConnected = true;
 
 	private SendableChooser autoChooser;
 
 	public void robotInit() {
 		OI.getInstance();
+		CameraServer.getInstance().startAutomaticCapture(RobotMap.CAMERA_NAME);
+
+		logFile = new LogFileCommand();
 		/*
 		 * try {
 		 * CameraServer.getInstance().startAutomaticCapture(RobotMap.CAMERA_NAME
@@ -51,21 +53,18 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putData(Arm.getInstance());
 
 		SmartDashboard.putData(Scheduler.getInstance());
-		
-		SmartDashboard.putData(new TurnRightCommand());
 
 		autoChooser = new SendableChooser();
-		autoChooser.addDefault("Drive Only", new DriveCommand(.7, .7, 2));
+		autoChooser.addDefault("Drive Only", new Drive(.7, .7, 2));
 		autoChooser.addObject("Pick Up 1 Tote", new AutoOneToteCommand());
 		autoChooser.addObject("Pick Up 2 Totes", new AutoTwoToteCommand());
 
 		SmartDashboard.putData("Autonomous", autoChooser);
-
-		logFile = new LogFileCommand();
 	}
 
 	private void log() {
-		SmartDashboard.putNumber("POT", Arm.getInstance().getPosition());
+		Elevator.getInstance().log();
+		Arm.getInstance().log();
 		logFile.putNumber("POT", Arm.getInstance().getPosition());
 	}
 
@@ -86,12 +85,6 @@ public class Robot extends IterativeRobot {
 			autoCommand.cancel();
 		if (!logFile.isRunning())
 			logFile.start();
-		/*
-		 * if (!logFile.isRunning()) logFile.start();
-		 * 
-		 * autoCommand.cancel(); if (!Elevator.getInstance().isEncoderReset())
-		 * new ResetElevatorEncoderCommand().start();
-		 */
 	}
 
 	public void teleopPeriodic() {

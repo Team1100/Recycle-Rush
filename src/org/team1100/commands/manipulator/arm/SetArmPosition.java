@@ -4,16 +4,19 @@ import org.team1100.subsystems.Arm;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class MoveArmToTopCommand extends Command {
+public class SetArmPosition extends Command {
 
-	public MoveArmToTopCommand() {
+	private int setpoint;
+
+	public SetArmPosition(int position) {
 		requires(Arm.getInstance());
+		setpoint = position;
 	}
 
 	@Override
 	protected void initialize() {
 		Arm.getInstance().enable();
-		Arm.getInstance().setSetpoint(Arm.TOP_SETPOINT);
+		Arm.getInstance().setSetpoint(setpoint);
 	}
 
 	@Override

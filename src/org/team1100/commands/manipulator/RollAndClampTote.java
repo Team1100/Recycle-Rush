@@ -1,39 +1,37 @@
-package org.team1100.commands.manipulator.elevator;
+package org.team1100.commands.manipulator;
 
 import org.team1100.subsystems.Elevator;
+import org.team1100.subsystems.Intake;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class ResetElevatorEncoderCommand extends Command {
+public class RollAndClampTote extends Command{
 	
-	
-	public ResetElevatorEncoderCommand(){
+	public RollAndClampTote(){
+		requires(Intake.getInstance());
 		requires(Elevator.getInstance());
-		setInterruptible(false);
 	}
 	
 	@Override
-	protected void initialize() {	
+	protected void initialize() {
+		Intake.getInstance().rollIn();
 	}
 
 	@Override
 	protected void execute() {
-		Elevator.getInstance().lift(-.3);
 	}
 
 	@Override
 	protected boolean isFinished() {
-		return Elevator.getInstance().isBeamBroken();
+		return Elevator.getInstance().isToteInIntake(); 
 	}
 
 	@Override
 	protected void end() {
-		Elevator.getInstance().resetEncoder();
 	}
 
 	@Override
 	protected void interrupted() {
-
 	}
-
+	
 }

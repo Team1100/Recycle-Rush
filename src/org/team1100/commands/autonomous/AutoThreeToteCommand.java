@@ -1,12 +1,5 @@
 package org.team1100.commands.autonomous;
 
-import org.team1100.commands.drive.DriveCommand;
-import org.team1100.commands.manipulator.PickUpToteCommand;
-import org.team1100.commands.manipulator.RollInToteCommand;
-import org.team1100.commands.manipulator.elevator.MoveElevatorToDriveCommand;
-import org.team1100.commands.manipulator.elevator.MoveElevatorToTopCommand;
-import org.team1100.commands.manipulator.elevator.ResetElevatorEncoderCommand;
-
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
 public class AutoThreeToteCommand extends CommandGroup {
