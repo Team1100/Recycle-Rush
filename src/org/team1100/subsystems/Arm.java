@@ -133,5 +133,6 @@ public class Arm extends PIDSubsystem {
 
 	public void log() {
 		SmartDashboard.putNumber("POT", pot.get());
+		SmartDashboard.putBoolean("Arm Claw Open", !isGripperClamped);
 	}
 }

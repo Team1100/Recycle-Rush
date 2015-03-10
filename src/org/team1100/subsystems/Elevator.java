@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj.tables.ITableListener;
 
 public class Elevator extends PIDSubsystem {
 
-	public static int TOP = 8000;
+	public static int TOP = 8500;
 	public static int DRIVING_HEIGHT = 2500;
 	public static int BOTTOM = 0;
 
@@ -60,7 +60,6 @@ public class Elevator extends PIDSubsystem {
 	private ElevatorDrive elevatorDrive;
 	private Encoder encoder;
 	private DigitalInput beamBreak;
-	private Counter beamCounter;
 	private DigitalInput infraredSensorBack;
 	private DigitalInput infraredSensorFront;
 
@@ -68,9 +67,9 @@ public class Elevator extends PIDSubsystem {
 		super(P, I, D);
 		elevatorDrive = new ElevatorDrive(RobotMap.E_ELEVATOR_CIM_1, RobotMap.E_ELEVATOR_CIM_2);
 
-		encoder = new Encoder(RobotMap.E_ENCODER_A, RobotMap.E_ENCODER_B, true);
+		encoder = new Encoder(RobotMap.E_ENCODER_A, RobotMap.E_ENCODER_B);
+		encoder.setReverseDirection(true);
 		beamBreak = new DigitalInput(RobotMap.E_BEAM_BREAK);
-		beamCounter = new Counter(beamBreak);
 		infraredSensorBack = new DigitalInput(RobotMap.E_INFRARED_SENSOR_BACK);
 		infraredSensorFront = new DigitalInput(RobotMap.E_INFRARED_SENSOR_FRONT);
 
@@ -93,11 +92,9 @@ public class Elevator extends PIDSubsystem {
 	}
 
 	public void lift(double speed) {
-		if (speed < 0 && beamCounter.get() > 0) {
+		if (speed < 0 && isBeamBroken()) {
 			speed = 0;
 			resetEncoder();
-		} else if (speed > 0 && isBeamBroken()) {
-			resetCounter();
 		}
 
 		elevatorDrive.lift(speed);
@@ -107,12 +104,8 @@ public class Elevator extends PIDSubsystem {
 		encoder.reset();
 	}
 
-	public void resetCounter() {
-		beamCounter.reset();
-	}
-
 	public boolean isBeamBroken() {
-		return beamCounter.get() > 0;
+		return !beamBreak.get();
 	}
 
 	public boolean isToteInElevator() {

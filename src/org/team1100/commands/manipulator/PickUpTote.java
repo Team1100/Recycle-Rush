@@ -22,6 +22,7 @@ public class PickUpTote extends CommandGroup {
 		addSequential(new RollInTote());
 		addSequential(new SetElevatorHeight(Elevator.BOTTOM));
 		addSequential(new WaitCommand(.25));
-		addSequential(new SetElevatorHeight(Elevator.DRIVING_HEIGHT));
+		addParallel(new OpenIntakeClaw());
+		addSequential(new SetElevatorHeight(Elevator.TOP));
 	}
 }

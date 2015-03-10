@@ -1,8 +1,10 @@
 package org.team1100;
 
-import org.team1100.commands.autonomous.AutoOneToteCommand;
-import org.team1100.commands.autonomous.AutoTwoToteCommand;
+import org.team1100.commands.autonomous.OneToteAuto;
+import org.team1100.commands.autonomous.ThreeToteAuto;
+import org.team1100.commands.autonomous.TwoToteAuto;
 import org.team1100.commands.drive.Drive;
+import org.team1100.commands.drive.TurnLeft;
 import org.team1100.commands.util.LogFileCommand;
 import org.team1100.subsystems.Arm;
 import org.team1100.subsystems.DriveTrain;
@@ -10,6 +12,7 @@ import org.team1100.subsystems.Elevator;
 import org.team1100.subsystems.Intake;
 
 import edu.wpi.first.wpilibj.CameraServer;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -34,18 +37,14 @@ public class Robot extends IterativeRobot {
 
 	public void robotInit() {
 		OI.getInstance();
-		CameraServer.getInstance().startAutomaticCapture(RobotMap.CAMERA_NAME);
 
 		logFile = new LogFileCommand();
-		/*
-		 * try {
-		 * CameraServer.getInstance().startAutomaticCapture(RobotMap.CAMERA_NAME
-		 * ); //MicrosoftCamera.getInstance().start(); } catch (VisionException
-		 * ve) { isCameraConnected = false; } catch (Exception e) {
-		 * e.printStackTrace(System.err); isCameraConnected = false;
-		 * 
-		 * } SmartDashboard.putBoolean("Camera Connected: ", isCameraConnected);
-		 */
+		try {
+			CameraServer.getInstance().setQuality(50);
+			CameraServer.getInstance().startAutomaticCapture(RobotMap.CAMERA_NAME);
+		} catch (Exception e) {
+			DriverStation.reportError(e.getMessage(), true);
+		}
 
 		SmartDashboard.putData(DriveTrain.getInstance());
 		SmartDashboard.putData(Elevator.getInstance());
@@ -56,9 +55,12 @@ public class Robot extends IterativeRobot {
 
 		autoChooser = new SendableChooser();
 		autoChooser.addDefault("Drive Only", new Drive(.7, .7, 2));
-		autoChooser.addObject("Pick Up 1 Tote", new AutoOneToteCommand());
-		autoChooser.addObject("Pick Up 2 Totes", new AutoTwoToteCommand());
+		autoChooser.addObject("Pick Up 1 Tote", new OneToteAuto());
+		autoChooser.addObject("Pick Up 2 Totes", new TwoToteAuto());
+		autoChooser.addObject("Pick Up 3 Totes", new ThreeToteAuto());
 
+		
+		SmartDashboard.putData(new TurnLeft());
 		SmartDashboard.putData("Autonomous", autoChooser);
 	}
 

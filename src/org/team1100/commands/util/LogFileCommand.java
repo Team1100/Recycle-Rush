@@ -45,7 +45,7 @@ public class LogFileCommand extends Command {
 		try {
 			writer = new PrintWriter(logFile);
 		} catch (FileNotFoundException e) {
-			DriverStation.reportError(e.getMessage(), true);
+			//DriverStation.reportError(e.getMessage(), true);
 			isWorking = false;
 		}
 

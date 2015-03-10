@@ -7,9 +7,9 @@ import org.team1100.commands.manipulator.intake.CloseIntakeClaw;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
-public class FirstTotePickUpCommand extends CommandGroup {
+public class FirstTotePickUp extends CommandGroup {
 	
-	public FirstTotePickUpCommand(){
+	public FirstTotePickUp(){
 		addSequential(new CloseIntakeClaw());
 		addSequential(new RollInTote());
 		addSequential(new ResetElevatorEncoder());

@@ -5,6 +5,6 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 public class PickUpContainerAndMove extends CommandGroup{
 	public PickUpContainerAndMove(){
 		addSequential(new ClampArmClaw());
-		addSequential(new MoveArm(-.7, 2.3));
+		addSequential(new MoveArm(-.7, 3));
 	}
 }

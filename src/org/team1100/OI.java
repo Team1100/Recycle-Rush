@@ -38,24 +38,27 @@ public class OI {
 		xbox.getButtonLeftBumper().whenPressed(new ToggleArmClaw());
 		xbox.getButtonRightBumper().whenPressed(new ToggleIntakeClaw());
 		xbox.getButtonA().whenPressed(new ToggleRotateArmClaw());
-		xbox.getButtonX().toggleWhenPressed(new ScoreTotes());
+		// xbox.getButtonX().toggleWhenPressed(new ScoreTotes());
 		xbox.getButtonB().toggleWhenPressed(new PickUpTote());
 		xbox.getButtonBack().whenPressed(new ResetElevatorEncoder());
 	}
 
 	/**
-	 * Returns the instance of the right {@link AttackThree AttackThree Joystick} to be able to get the value of
-	 * the axis' and to test whether a button is pressed
+	 * Returns the instance of the right {@link AttackThree AttackThree
+	 * Joystick} to be able to get the value of the axis' and to test whether a
+	 * button is pressed
 	 * 
-	 * @return the instance of the right {@link AttackThree AttackThree Joystick}
+	 * @return the instance of the right {@link AttackThree AttackThree
+	 *         Joystick}
 	 */
 	public AttackThree getRightJoystick() {
 		return rightStick;
 	}
 
 	/**
-	 * Returns the instance of the left {@link AttackThree AttackThree Joystick} to be able to get the value of
-	 * the axis' and to test whether a button is pressed
+	 * Returns the instance of the left {@link AttackThree AttackThree Joystick}
+	 * to be able to get the value of the axis' and to test whether a button is
+	 * pressed
 	 * 
 	 * @return the instance of the left {@link AttackThree AttackThree Joystick}
 	 */
@@ -64,8 +67,8 @@ public class OI {
 	}
 
 	/**
-	 * Returns the instance of the {@link XboxController} to be able to get the value
-	 * of the axis' and to test whether a button is pressed
+	 * Returns the instance of the {@link XboxController} to be able to get the
+	 * value of the axis' and to test whether a button is pressed
 	 * 
 	 * @return the instance of the {@link XboxController}
 	 */
