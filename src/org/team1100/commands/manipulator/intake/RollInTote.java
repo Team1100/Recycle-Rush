@@ -1,15 +1,13 @@
-package org.team1100.commands.manipulator;
+package org.team1100.commands.manipulator.intake;
 
-import org.team1100.subsystems.Elevator;
 import org.team1100.subsystems.Intake;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class RollAndClampTote extends Command{
-	
-	public RollAndClampTote(){
+public class RollInTote extends Command {
+
+	public RollInTote(){
 		requires(Intake.getInstance());
-		requires(Elevator.getInstance());
 	}
 	
 	@Override
@@ -23,15 +21,17 @@ public class RollAndClampTote extends Command{
 
 	@Override
 	protected boolean isFinished() {
-		return Elevator.getInstance().isToteInIntake(); 
+		return Intake.getInstance().isToteInElevator();
 	}
 
 	@Override
 	protected void end() {
+		Intake.getInstance().stopIntake();
 	}
 
 	@Override
 	protected void interrupted() {
+		end();
 	}
-	
+
 }

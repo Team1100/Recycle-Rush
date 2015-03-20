@@ -3,10 +3,12 @@ package org.team1100.subsystems;
 import org.team1100.RobotMap;
 import org.team1100.commands.drive.UserDrive;
 
+import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriveTrain extends Subsystem {
 
@@ -21,6 +23,7 @@ public class DriveTrain extends Subsystem {
 	private RobotDrive drive;
 	private Victor victorLeft;
 	private Victor victorRight;
+	private Gyro gyro;
 
 	/**
 	 * Initializes the DriveTrain, using the talon values from RobotMap
@@ -31,8 +34,12 @@ public class DriveTrain extends Subsystem {
 
 		drive = new RobotDrive(victorLeft, victorRight);
 
+		gyro = new Gyro(RobotMap.D_GYRO);
+		gyro.reset();
+		
 		LiveWindow.addActuator("Drive Train", "Left Victor", victorLeft);
 		LiveWindow.addActuator("Drive Train", "Right Victor", victorRight);
+		LiveWindow.addSensor("Drive Train", "Gyro", gyro);
 	}
 
 	/**
@@ -44,6 +51,10 @@ public class DriveTrain extends Subsystem {
 	public void driveTank(double leftValue, double rightValue) {
 		drive.tankDrive(leftValue, rightValue);
 	}
+	
+	public double getHeading(){
+		return gyro.getAngle();
+	}
 
 	/**
 	 * Sets the default command to drive the robot via an operator. This command
@@ -51,6 +62,10 @@ public class DriveTrain extends Subsystem {
 	 */
 	public void initDefaultCommand() {
 		setDefaultCommand(new UserDrive());
+	}
+	
+	public void log(){
+		SmartDashboard.putNumber("Gyro", getHeading());
 	}
 
 }

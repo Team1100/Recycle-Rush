@@ -15,7 +15,7 @@ public class SetElevatorHeight extends Command {
 
 	@Override
 	protected void initialize() {
-		Elevator.getInstance().enable();
+		// Elevator.getInstance().enable();
 		Elevator.getInstance().setSetpoint(setpoint);
 	}
 
@@ -30,7 +30,7 @@ public class SetElevatorHeight extends Command {
 
 	@Override
 	protected void end() {
-		Elevator.getInstance().disable();
+		// Elevator.getInstance().disable();
 	}
 
 	@Override

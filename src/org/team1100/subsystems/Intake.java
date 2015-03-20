@@ -3,11 +3,13 @@ package org.team1100.subsystems;
 import org.team1100.RobotMap;
 import org.team1100.commands.manipulator.intake.UserSpinIntake;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Intake extends Subsystem {
 	private static Intake intake;
@@ -22,18 +24,33 @@ public class Intake extends Subsystem {
 	private Victor victorLeft;
 	private Victor victorRight;
 	private DoubleSolenoid solenoid;
+	private DigitalInput bannerSensorBack;
+	private DigitalInput bannerSensorFront;
 	private boolean isClawClosed;
 
 	private Intake() {
 		victorLeft = new Victor(RobotMap.I_LEFT_MOTOR);
 		victorRight = new Victor(RobotMap.I_RIGHT_MOTOR);
 		solenoid = new DoubleSolenoid(RobotMap.PCM_ID, RobotMap.I_SOLENOID_A, RobotMap.I_SOLENOID_B);
+		bannerSensorBack = new DigitalInput(RobotMap.E_BANNER_SENSOR_BACK);
+		bannerSensorFront = new DigitalInput(RobotMap.E_BANNER_SENSOR_FRONT);
+
 		solenoid.set(Value.kOff);
+		isClawClosed = false;
+
 		LiveWindow.addActuator("Intake", "Left Victor", victorLeft);
 		LiveWindow.addActuator("Intake", "Right Victor", victorRight);
 		LiveWindow.addSensor("Intake", "Solenoid", solenoid);
+		LiveWindow.addSensor("Intake", "Infrared Sensor", bannerSensorBack);
+		LiveWindow.addSensor("Intake", "Infrared Sensor", bannerSensorFront);
+	}
 
-		isClawClosed = false;
+	public boolean isToteInElevator() {
+		return !bannerSensorBack.get();
+	}
+
+	public boolean isToteInIntake() {
+		return !bannerSensorFront.get();
 	}
 
 	public void rollIn() {
@@ -80,6 +97,10 @@ public class Intake extends Subsystem {
 		victorLeft.set(speed);
 		victorRight.set(speed);
 
+	}
+
+	public void log() {
+		SmartDashboard.putBoolean("Tote In", isToteInElevator());
 	}
 
 }

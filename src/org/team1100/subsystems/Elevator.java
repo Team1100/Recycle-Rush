@@ -4,7 +4,6 @@ import org.team1100.RobotMap;
 import org.team1100.commands.manipulator.elevator.UserMoveElevator;
 
 import edu.wpi.first.wpilibj.CANTalon;
-import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Preferences;
@@ -31,10 +30,10 @@ public class Elevator extends PIDSubsystem {
 	private static final String dKey = "ElevatorD";
 	private static final String toleranceKey = "ElevatorTolerence";
 
-	private static double P = .001;
+	private static double P = .05;
 	private static double I = 0;
-	private static double D = .001;
-	private static int ABSOLUTE_TOLERANCE = 250;
+	private static double D = 0;
+	private static int ABSOLUTE_TOLERANCE = 300;
 
 	public static Elevator getInstance() {
 		if (elevator == null)
@@ -44,7 +43,7 @@ public class Elevator extends PIDSubsystem {
 	}
 
 	public static void updatePreferences() {
-		P = Preferences.getInstance().getDouble(pKey, P);
+		P = Preferences.getInstance().getDouble(pKey, P / 100.0) / 100.0;
 		I = Preferences.getInstance().getDouble(iKey, I);
 		D = Preferences.getInstance().getDouble(dKey, D);
 		ABSOLUTE_TOLERANCE = Preferences.getInstance().getInt(toleranceKey, ABSOLUTE_TOLERANCE);
@@ -60,25 +59,21 @@ public class Elevator extends PIDSubsystem {
 	private ElevatorDrive elevatorDrive;
 	private Encoder encoder;
 	private DigitalInput beamBreak;
-	private DigitalInput infraredSensorBack;
-	private DigitalInput infraredSensorFront;
 
 	private Elevator() {
 		super(P, I, D);
-		elevatorDrive = new ElevatorDrive(RobotMap.E_ELEVATOR_CIM_1, RobotMap.E_ELEVATOR_CIM_2);
+		elevatorDrive = new ElevatorDrive(RobotMap.E_ELEVATOR_CIM_1);
 
 		encoder = new Encoder(RobotMap.E_ENCODER_A, RobotMap.E_ENCODER_B);
 		encoder.setReverseDirection(true);
 		beamBreak = new DigitalInput(RobotMap.E_BEAM_BREAK);
-		infraredSensorBack = new DigitalInput(RobotMap.E_INFRARED_SENSOR_BACK);
-		infraredSensorFront = new DigitalInput(RobotMap.E_INFRARED_SENSOR_FRONT);
 
+		// setOutputRange(BOTTOM, TOP);
 		setAbsoluteTolerance(ABSOLUTE_TOLERANCE);
+		enable();
 
 		LiveWindow.addActuator("Elevator", "Encoder", encoder);
 		LiveWindow.addSensor("Elevator", "Beam Break", beamBreak);
-		LiveWindow.addSensor("Elevator", "Infrared Sensor", infraredSensorBack);
-		LiveWindow.addSensor("Elevator", "Infrared Sensor", infraredSensorFront);
 		LiveWindow.addSensor("Elevator", "PID Controller", getPIDController());
 		LiveWindow.addActuator("Elevator", "Elevator Drive", elevatorDrive);
 
@@ -100,6 +95,15 @@ public class Elevator extends PIDSubsystem {
 		elevatorDrive.lift(speed);
 	}
 
+	public void setSetpoint(double point) {
+		if (point < 0)
+			super.setSetpoint(0);
+		else if (point > TOP)
+			super.setSetpoint(TOP);
+		else
+			super.setSetpoint(point);
+	}
+
 	public void resetEncoder() {
 		encoder.reset();
 	}
@@ -108,13 +112,7 @@ public class Elevator extends PIDSubsystem {
 		return !beamBreak.get();
 	}
 
-	public boolean isToteInElevator() {
-		return !infraredSensorBack.get();
-	}
 
-	public boolean isToteInIntake() {
-		return !infraredSensorFront.get();
-	}
 
 	@Override
 	protected double returnPIDInput() {
@@ -133,19 +131,16 @@ public class Elevator extends PIDSubsystem {
 
 	public void log() {
 		SmartDashboard.putNumber("Encoder", getPosition());
-		SmartDashboard.putBoolean("Tote In", isToteInElevator());
 	}
 
 	private class ElevatorDrive implements LiveWindowSendable {
 
 		private CANTalon talon1;
-		private CANTalon talon2;
 		private ITable m_table;
 		private ITableListener m_table_listener;
 
-		public ElevatorDrive(int channel1, int channel2) {
+		public ElevatorDrive(int channel1) {
 			talon1 = new CANTalon(channel1);
-			talon2 = new CANTalon(channel2);
 		}
 
 		@Override
@@ -169,14 +164,12 @@ public class Elevator extends PIDSubsystem {
 		public void updateTable() {
 			if (m_table != null) {
 				m_table.putNumber("Value1", talon1.getSpeed());
-				m_table.putNumber("Value2", talon2.getSpeed());
 			}
 		}
 
 		@Override
 		public void startLiveWindowMode() {
 			talon1.set(0);
-			talon2.set(0);
 			m_table_listener = new ITableListener() {
 				public void valueChanged(ITable itable, String key, Object value, boolean bln) {
 					lift(((Double) value).doubleValue());
@@ -189,14 +182,10 @@ public class Elevator extends PIDSubsystem {
 		@Override
 		public void stopLiveWindowMode() {
 			talon1.set(0);
-			talon2.set(0);
-
 		}
 
 		public void lift(double speed) {
 			talon1.set(-speed);
-			talon2.set(-speed);
-
 		}
 
 	}

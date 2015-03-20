@@ -9,12 +9,12 @@ import edu.wpi.first.wpilibj.command.Command;
 
 public class UserMoveElevator extends Command {
 
-	private static double SPEED_PERCENT = 0.8;
-	private static final String KEY_NAME = "Lift_Speed_Percent";
+	private static double PID_COEFFICIENT = 300;
+	private static final String KEY_NAME = "LiftPIDCoeffecient";
 
 	public UserMoveElevator() {
 		requires(Elevator.getInstance());
-		Preferences.getInstance().putDouble(KEY_NAME, SPEED_PERCENT);
+		Preferences.getInstance().putDouble(KEY_NAME, PID_COEFFICIENT);
 	}
 
 	@Override
@@ -23,10 +23,10 @@ public class UserMoveElevator extends Command {
 
 	@Override
 	protected void execute() {
-		SPEED_PERCENT = Preferences.getInstance().getDouble(KEY_NAME, SPEED_PERCENT);
-		double speed = -OI.getInstance().getXboxController().getAxis(XboxAxis.kYLeft) * SPEED_PERCENT;;
-
-		Elevator.getInstance().lift(speed);
+		PID_COEFFICIENT = Preferences.getInstance().getDouble(KEY_NAME, PID_COEFFICIENT);
+		double percent = -OI.getInstance().getXboxController().getAxis(XboxAxis.kYLeft);
+		
+		Elevator.getInstance().setSetpoint(Elevator.getInstance().getSetpoint() + PID_COEFFICIENT * percent);
 	}
 
 	@Override
@@ -36,7 +36,6 @@ public class UserMoveElevator extends Command {
 
 	@Override
 	protected void end() {
-		Elevator.getInstance().lift(0);
 	}
 
 	@Override

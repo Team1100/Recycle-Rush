@@ -12,6 +12,7 @@ public class ResetElevatorEncoder extends Command {
 
 	@Override
 	protected void initialize() {
+		Elevator.getInstance().disable();
 		// Elevator.getInstance().resetCounter();
 		Elevator.getInstance().lift(-.6);
 	}
@@ -29,6 +30,8 @@ public class ResetElevatorEncoder extends Command {
 	protected void end() {
 		Elevator.getInstance().lift(0);
 		Elevator.getInstance().resetEncoder();
+		Elevator.getInstance().setSetpoint(0);
+		Elevator.getInstance().enable();
 	}
 
 	@Override

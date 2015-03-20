@@ -4,14 +4,14 @@ import org.team1100.commands.autonomous.OneToteAuto;
 import org.team1100.commands.autonomous.ThreeToteAuto;
 import org.team1100.commands.autonomous.TwoToteAuto;
 import org.team1100.commands.drive.Drive;
-import org.team1100.commands.drive.TurnLeft;
+import org.team1100.commands.drive.Turn;
 import org.team1100.commands.util.LogFileCommand;
 import org.team1100.subsystems.Arm;
 import org.team1100.subsystems.DriveTrain;
 import org.team1100.subsystems.Elevator;
 import org.team1100.subsystems.Intake;
+import org.team1100.subsystems.MiniArm;
 
-import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -40,8 +40,8 @@ public class Robot extends IterativeRobot {
 
 		logFile = new LogFileCommand();
 		try {
-			CameraServer.getInstance().setQuality(50);
-			CameraServer.getInstance().startAutomaticCapture(RobotMap.CAMERA_NAME);
+			// CameraServer.getInstance().setQuality(50);
+			// CameraServer.getInstance().startAutomaticCapture(RobotMap.CAMERA_NAME);
 		} catch (Exception e) {
 			DriverStation.reportError(e.getMessage(), true);
 		}
@@ -50,6 +50,7 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putData(Elevator.getInstance());
 		SmartDashboard.putData(Intake.getInstance());
 		SmartDashboard.putData(Arm.getInstance());
+		SmartDashboard.putData(MiniArm.getInstance());
 
 		SmartDashboard.putData(Scheduler.getInstance());
 
@@ -59,14 +60,16 @@ public class Robot extends IterativeRobot {
 		autoChooser.addObject("Pick Up 2 Totes", new TwoToteAuto());
 		autoChooser.addObject("Pick Up 3 Totes", new ThreeToteAuto());
 
-		
-		SmartDashboard.putData(new TurnLeft());
+		// SmartDashboard.putData(new TurnLeft());
+		SmartDashboard.putData("Turn 90 Degrees Right", new Turn(90));
 		SmartDashboard.putData("Autonomous", autoChooser);
 	}
 
 	private void log() {
 		Elevator.getInstance().log();
 		Arm.getInstance().log();
+		DriveTrain.getInstance().log();
+		Intake.getInstance().log();
 		logFile.putNumber("POT", Arm.getInstance().getPosition());
 	}
 

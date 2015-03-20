@@ -1,6 +1,5 @@
-package org.team1100.commands.manipulator;
+package org.team1100.commands.manipulator.intake;
 
-import org.team1100.subsystems.Elevator;
 import org.team1100.subsystems.Intake;
 
 import edu.wpi.first.wpilibj.command.Command;
@@ -9,7 +8,6 @@ public class RollOutTote extends Command {
 
 	public RollOutTote() {
 		requires(Intake.getInstance());
-		requires(Elevator.getInstance());
 	}
 
 	@Override
@@ -23,7 +21,7 @@ public class RollOutTote extends Command {
 
 	@Override
 	protected boolean isFinished() {
-		return !Elevator.getInstance().isToteInIntake();
+		return !Intake.getInstance().isToteInIntake();
 	}
 
 	@Override

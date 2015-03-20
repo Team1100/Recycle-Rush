@@ -2,7 +2,6 @@ package org.team1100.input;
 
 import org.team1100.RobotMap;
 
-import com.ni.vision.NIVision;
 import com.ni.vision.NIVision.Image;
 
 import edu.wpi.first.wpilibj.CameraServer;

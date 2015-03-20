@@ -77,6 +77,7 @@ public class RobotMap {
 	// [D]rive Train
 	public static final int D_LEFT_MOTOR = PWM_0;
 	public static final int D_RIGHT_MOTOR = PWM_1;
+	public static final int D_GYRO = ANALOG_IN_1;
 
 	// [C]ontrol
 	public static final int C_XBOX_CONTROLLER = DS_USB_0;
@@ -92,8 +93,8 @@ public class RobotMap {
 	public static final int E_ENCODER_A = DIO_0;
 	public static final int E_ENCODER_B = DIO_1;
 	public static final int E_BEAM_BREAK = DIO_2;
-	public static final int E_INFRARED_SENSOR_BACK = DIO_3;
-	public static final int E_INFRARED_SENSOR_FRONT = DIO_4;
+	public static final int E_BANNER_SENSOR_BACK = DIO_3;
+	public static final int E_BANNER_SENSOR_FRONT = DIO_4;
 
 	// [I]ntake
 	public static final int I_LEFT_MOTOR = PWM_4;
@@ -109,4 +110,7 @@ public class RobotMap {
 	public static final int A_GRIPPER_SOLENOID_B = PNEUMATIC_5;
 	public static final int A_CLAW_ROTATE_SOLENOID_B = PNEUMATIC_2;
 	public static final int A_CLAW_ROTATE_SOLENOID_A = PNEUMATIC_3;
+	
+	// [M]ini[A]rm
+	public static final int MA_MOTOR = PWM_6;
 }

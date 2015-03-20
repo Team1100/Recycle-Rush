@@ -4,6 +4,7 @@ import org.team1100.commands.drive.Drive;
 import org.team1100.commands.manipulator.arm.SetArmPosition;
 import org.team1100.commands.manipulator.elevator.SetElevatorHeight;
 import org.team1100.commands.manipulator.intake.OpenIntakeClaw;
+import org.team1100.commands.manipulator.intake.RollOutTote;
 import org.team1100.subsystems.Arm;
 import org.team1100.subsystems.Elevator;
 

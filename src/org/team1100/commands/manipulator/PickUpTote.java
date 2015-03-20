@@ -3,6 +3,8 @@ package org.team1100.commands.manipulator;
 import org.team1100.commands.manipulator.elevator.SetElevatorHeight;
 import org.team1100.commands.manipulator.intake.CloseIntakeClaw;
 import org.team1100.commands.manipulator.intake.OpenIntakeClaw;
+import org.team1100.commands.manipulator.intake.RollAndClampTote;
+import org.team1100.commands.manipulator.intake.RollInTote;
 import org.team1100.subsystems.Elevator;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
