@@ -2,6 +2,7 @@ package org.team1100.commands.drive;
 
 import org.team1100.subsystems.DriveTrain;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Command;
 
 public class Drive extends Command {
@@ -45,6 +46,7 @@ public class Drive extends Command {
 
 	@Override
 	protected void interrupted() {
+		DriverStation.reportError("Drive Interrupted", false);
 	}
 
 }

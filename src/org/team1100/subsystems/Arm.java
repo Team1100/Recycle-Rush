@@ -82,8 +82,8 @@ public class Arm extends PIDSubsystem {
 	}
 
 	public void moveArm(double speed) {
-		talonLeft.set(speed);
-		talonRight.set(-speed);
+		talonLeft.set(-speed);
+		talonRight.set(speed);
 	}
 
 	public void toggleGripper() {
@@ -132,7 +132,7 @@ public class Arm extends PIDSubsystem {
 	}
 
 	public void log() {
-		SmartDashboard.putNumber("POT", pot.get());
+		//SmartDashboard.putNumber("POT", pot.get());
 		SmartDashboard.putBoolean("Arm Claw Open", !isGripperClamped);
 	}
 }

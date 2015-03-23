@@ -12,6 +12,7 @@ import org.team1100.subsystems.Elevator;
 import org.team1100.subsystems.Intake;
 import org.team1100.subsystems.MiniArm;
 
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -40,29 +41,37 @@ public class Robot extends IterativeRobot {
 
 		logFile = new LogFileCommand();
 		try {
-			// CameraServer.getInstance().setQuality(50);
-			// CameraServer.getInstance().startAutomaticCapture(RobotMap.CAMERA_NAME);
+			CameraServer.getInstance().setQuality(50);
+			CameraServer.getInstance().startAutomaticCapture(RobotMap.CAMERA_NAME);
 		} catch (Exception e) {
 			DriverStation.reportError(e.getMessage(), true);
 		}
+		DriveTrain.getInstance();
+		Elevator.getInstance();
+		Intake.getInstance();
+		Arm.getInstance();
+		MiniArm.getInstance();
 
-		SmartDashboard.putData(DriveTrain.getInstance());
-		SmartDashboard.putData(Elevator.getInstance());
-		SmartDashboard.putData(Intake.getInstance());
-		SmartDashboard.putData(Arm.getInstance());
-		SmartDashboard.putData(MiniArm.getInstance());
+		/*
+		 * SmartDashboard.putData(DriveTrain.getInstance());
+		 * SmartDashboard.putData(Elevator.getInstance());
+		 * SmartDashboard.putData(Intake.getInstance());
+		 * SmartDashboard.putData(Arm.getInstance());
+		 * SmartDashboard.putData(MiniArm.getInstance());
+		 */
 
 		SmartDashboard.putData(Scheduler.getInstance());
 
 		autoChooser = new SendableChooser();
-		autoChooser.addDefault("Drive Only", new Drive(.7, .7, 2));
+		autoChooser.addObject("Drive Only", new Drive(.7, .7, 2));
 		autoChooser.addObject("Pick Up 1 Tote", new OneToteAuto());
 		autoChooser.addObject("Pick Up 2 Totes", new TwoToteAuto());
-		autoChooser.addObject("Pick Up 3 Totes", new ThreeToteAuto());
+		autoChooser.addDefault("Pick Up 3 Totes", new ThreeToteAuto());
 
 		// SmartDashboard.putData(new TurnLeft());
-		SmartDashboard.putData("Turn 90 Degrees Right", new Turn(90));
+		// SmartDashboard.putData("Turn 90 Degrees Right", new Turn(90));
 		SmartDashboard.putData("Autonomous", autoChooser);
+		SmartDashboard.putData(new Turn(90));
 	}
 
 	private void log() {
@@ -70,7 +79,7 @@ public class Robot extends IterativeRobot {
 		Arm.getInstance().log();
 		DriveTrain.getInstance().log();
 		Intake.getInstance().log();
-		logFile.putNumber("POT", Arm.getInstance().getPosition());
+		// logFile.putNumber("POT", Arm.getInstance().getPosition());
 	}
 
 	public void autonomousInit() {

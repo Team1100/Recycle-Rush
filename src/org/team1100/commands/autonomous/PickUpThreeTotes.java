@@ -22,9 +22,11 @@ public class PickUpThreeTotes extends CommandGroup {
 		addSequential(new SetElevatorHeight(Elevator.TOP));
 		addSequential(new RollAndClampTote());
 		addSequential(new CloseIntakeClaw());
-		addSequential(new RollInTote());
+
 		// Injected command
-		addParallel(new OpenMiniArm());
+		addParallel(new MiniArmWait());
+		
+		addSequential(new RollInTote());
 		addSequential(new SetElevatorHeight(Elevator.BOTTOM));
 		addSequential(new WaitCommand(.25));
 		addParallel(new OpenIntakeClaw());

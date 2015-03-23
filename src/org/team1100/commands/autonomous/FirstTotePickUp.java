@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 
 public class FirstTotePickUp extends CommandGroup {
 	
-	public FirstTotePickUp(){
+	public FirstTotePickUp(){	
 		addSequential(new CloseIntakeClaw());
 		addSequential(new RollInTote());
 		addSequential(new ResetElevatorEncoder());

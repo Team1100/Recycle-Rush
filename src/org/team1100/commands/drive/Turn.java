@@ -42,7 +42,8 @@ public class Turn extends Command {
 
 	@Override
 	protected boolean isFinished() {
-		return Math.abs(startAngle - (dAngle - DriveTrain.getInstance().getHeading())) < EPSILON;
+		return DriveTrain.getInstance().getHeading() - startAngle > (dAngle - EPSILON);
+		//return Math.abs(startAngle - (dAngle - DriveTrain.getInstance().getHeading())) < EPSILON;
 	}
 
 	@Override
