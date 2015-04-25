@@ -5,7 +5,7 @@ import org.team1100.subsystems.DriveTrain;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.command.Command;
 
-public class Turn extends Command {
+public class TurnRight extends Command {
 
 	private int dAngle;
 	private double EPSILON = 5;
@@ -16,7 +16,7 @@ public class Turn extends Command {
 	private String speedOneKey = "SpeedOne";
 	private String speedTwoKey = "SpeedTwo";
 
-	public Turn(int dAngle) {
+	public TurnRight(int dAngle) {
 		requires(DriveTrain.getInstance());
 		this.dAngle = dAngle;
 		Preferences.getInstance().putDouble(speedOneKey, SPEED_ONE);
@@ -28,11 +28,6 @@ public class Turn extends Command {
 		SPEED_ONE = Preferences.getInstance().getDouble(speedOneKey, SPEED_ONE);
 		SPEED_TWO = Preferences.getInstance().getDouble(speedTwoKey, SPEED_TWO);
 		startAngle = DriveTrain.getInstance().getHeading();
-		if (dAngle < 0) {
-			double temp = SPEED_ONE;
-			SPEED_ONE = SPEED_TWO;
-			SPEED_TWO = temp;
-		}
 	}
 
 	@Override
@@ -43,7 +38,8 @@ public class Turn extends Command {
 	@Override
 	protected boolean isFinished() {
 		return DriveTrain.getInstance().getHeading() - startAngle > (dAngle - EPSILON);
-		//return Math.abs(startAngle - (dAngle - DriveTrain.getInstance().getHeading())) < EPSILON;
+		// return Math.abs(startAngle - (dAngle -
+		// DriveTrain.getInstance().getHeading())) < EPSILON;
 	}
 
 	@Override

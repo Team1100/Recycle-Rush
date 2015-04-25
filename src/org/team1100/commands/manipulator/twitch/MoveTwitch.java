@@ -1,19 +1,19 @@
-package org.team1100.commands.manipulator.miniarm;
+package org.team1100.commands.manipulator.twitch;
 
-import org.team1100.subsystems.MiniArm;
+import org.team1100.subsystems.Twitch;
 
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.command.Command;
 
-public class MoveMiniArm extends Command {
+public class MoveTwitch extends Command {
 
 	private String speedKey = "MiniArmSpeed";
 	private double SPEED = .5;
 
 	private int sign;
 
-	public MoveMiniArm(boolean foward) {
-		requires(MiniArm.getInstance());
+	public MoveTwitch(boolean foward) {
+		requires(Twitch.getInstance());
 		sign = (foward) ? 1 : -1;
 
 		Preferences.getInstance().putDouble(speedKey, SPEED);
@@ -26,7 +26,7 @@ public class MoveMiniArm extends Command {
 
 	@Override
 	protected void execute() {
-		MiniArm.getInstance().spin(sign * .5);
+		Twitch.getInstance().move(sign * .5);
 	}
 
 	@Override
@@ -36,7 +36,7 @@ public class MoveMiniArm extends Command {
 
 	@Override
 	protected void end() {
-		MiniArm.getInstance().stop();
+		Twitch.getInstance().stop();
 	}
 
 	@Override

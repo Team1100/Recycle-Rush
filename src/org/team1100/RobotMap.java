@@ -84,15 +84,16 @@ public class RobotMap {
 	public static final int C_LEFT_JOYSTICK = DS_USB_1;
 	public static final int C_RIGHT_JOYSTICK = DS_USB_2;
 	public static final int C_LAUNCHPAD_CONTROLLER = DS_USB_3;
-	public static final String CAMERA_NAME = "cam1";
 	public static final int PCM_ID = CAN_ID_1;
+	public static final String CAMERA_NAME = "cam1";
+	public static final String USB_FILE_LOCATION = "/media/sda1/logs";
 
 	// [E]levator
 	public static final int E_ELEVATOR_CIM_1 = CAN_ID_2;
 	public static final int E_ELEVATOR_CIM_2 = CAN_ID_3;
 	public static final int E_ENCODER_A = DIO_0;
 	public static final int E_ENCODER_B = DIO_1;
-	public static final int E_BEAM_BREAK = DIO_2;
+	public static final int E_LIMIT_SWITCH = DIO_2;
 	public static final int E_BANNER_SENSOR_BACK = DIO_3;
 	public static final int E_BANNER_SENSOR_FRONT = DIO_4;
 
@@ -110,6 +111,7 @@ public class RobotMap {
 	public static final int A_GRIPPER_SOLENOID_B = PNEUMATIC_5;
 	public static final int A_CLAW_ROTATE_SOLENOID_B = PNEUMATIC_2;
 	public static final int A_CLAW_ROTATE_SOLENOID_A = PNEUMATIC_3;
+	public static final int A_BANNER_SENSOR = DIO_5;
 	
 	// [M]ini[A]rm
 	public static final int MA_MOTOR = PWM_6;

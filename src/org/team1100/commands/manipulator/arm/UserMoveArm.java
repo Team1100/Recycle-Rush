@@ -18,20 +18,8 @@ public class UserMoveArm extends Command {
 
 	@Override
 	protected void execute() {
-		int pov = OI.getInstance().getXboxController().getPOV(0);
-		if (pov != -1)
-			Arm.getInstance().enable();
-		if (pov == 270) {
-			// setpoint 1
-		} else if (pov == 0) {
-			// setpoint 2
-		} else if (pov == 90) {
-			// setpoint 3
-		} else {
-			Arm.getInstance().disable();
-			double speed = OI.getInstance().getXboxController().getAxis(XboxAxis.kYRight);
-			Arm.getInstance().moveArm(speed);
-		}
+		double speed = OI.getInstance().getXboxController().getAxis(XboxAxis.kYRight);
+		Arm.getInstance().moveArm(speed);
 	}
 
 	@Override
@@ -41,7 +29,7 @@ public class UserMoveArm extends Command {
 
 	@Override
 	protected void end() {
-		Arm.getInstance().disable();
+		Arm.getInstance().moveArm(0);
 	}
 
 	@Override

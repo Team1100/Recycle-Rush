@@ -18,7 +18,7 @@ public class ToggleArmClaw extends Command{
 
 	@Override
 	protected void execute() {
-		Arm.getInstance().toggleGripper();
+		Arm.getInstance().toggleClawClamped();
 		isFinished = true;
 	}
 

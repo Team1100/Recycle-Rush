@@ -2,47 +2,34 @@ package org.team1100.subsystems;
 
 import org.team1100.RobotMap;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
-public class MiniArm extends Subsystem {
+public class Twitch extends Subsystem {
 
-	private static MiniArm miniArm;
+	private static Twitch miniArm;
 
-	public static MiniArm getInstance() {
+	public static Twitch getInstance() {
 		if (miniArm == null)
-			miniArm = new MiniArm();
+			miniArm = new Twitch();
 		return miniArm;
 	}
 
 	private Victor victor;
-	private boolean isOpen;
+	private DigitalInput limitSwitch;
 
-	public MiniArm() {
+	public Twitch() {
 		victor = new Victor(RobotMap.MA_MOTOR);
-		isOpen = false;
-		LiveWindow.addActuator("Mini Arm", "Arm", victor);
+		limitSwitch = new DigitalInput(6);
+
+		LiveWindow.addActuator("Twitch", "Arm Victor", victor);
+		LiveWindow.addSensor("Twitch", "Limit Switch", limitSwitch);
 	}
 
-	/**
-	 * Sets whether the MiniArm is out. This is used to protect the
-	 * {@link #open() open} and {@link #close() close} methods from damaging the
-	 * robot
-	 * 
-	 * @param isOpen if the arm is open
-	 */
-	public void setOut(boolean isOpen) {
-		this.isOpen = isOpen;
-	}
-
-	/**
-	 * Returns whether the arm is open or not
-	 * 
-	 * @return whether the arm is open
-	 */
-	public boolean isOpen() {
-		return isOpen;
+	public boolean isOut() {
+		return !limitSwitch.get();
 	}
 
 	/**
@@ -50,7 +37,9 @@ public class MiniArm extends Subsystem {
 	 * 
 	 * @param speed the speed, from -1 to 1
 	 */
-	public void spin(double speed) {
+	public void move(double speed) {
+		if (speed > 0 && isOut())
+			speed = 0;
 		victor.set(speed);
 	}
 
@@ -58,24 +47,21 @@ public class MiniArm extends Subsystem {
 	 * Spins the arm in the open direction if it isn't open already open
 	 */
 	public void open() {
-		if (!isOpen)
-			spin(1);
-
+		move(1);
 	}
 
 	/**
 	 * Closes the arm in the closed direction if it isn't already closed
 	 */
 	public void close() {
-		if (isOpen())
-			spin(-1);
+		move(-1);
 	}
 
 	/**
 	 * Stops the arm
 	 */
 	public void stop() {
-		spin(0);
+		move(0);
 	}
 
 	@Override

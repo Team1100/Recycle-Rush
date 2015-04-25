@@ -20,7 +20,7 @@ public class UserSpinIntake extends Command {
 	protected void execute() {
 		double speedLeft = -OI.getInstance().getXboxController().getAxis(XboxAxis.kLeftTrigger);
 		double speedRight = OI.getInstance().getXboxController().getAxis(XboxAxis.kRightTrigger);
-		Intake.getInstance().intake(speedLeft + speedRight);
+		Intake.getInstance().spin(speedLeft + speedRight);
 	}
 
 	@Override

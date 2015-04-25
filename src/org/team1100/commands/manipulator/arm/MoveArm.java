@@ -25,11 +25,11 @@ public class MoveArm extends Command {
 	@Override
 	protected void initialize() {
 		setTimeout(timeout);
-		Arm.getInstance().moveArm(speed);
 	}
 
 	@Override
 	protected void execute() {
+		Arm.getInstance().moveArm(speed);
 	}
 
 	@Override

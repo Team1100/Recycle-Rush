@@ -16,7 +16,7 @@ public class ClampArmClaw extends Command {
 
 	@Override
 	protected void execute() {
-		Arm.getInstance().clampGripper();
+		Arm.getInstance().openClaw();
 	}
 
 	@Override

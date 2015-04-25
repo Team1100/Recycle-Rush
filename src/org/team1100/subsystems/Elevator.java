@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.livewindow.LiveWindowSendable;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.tables.ITable;
 import edu.wpi.first.wpilibj.tables.ITableListener;
 
@@ -58,7 +57,7 @@ public class Elevator extends PIDSubsystem {
 
 	private ElevatorDrive elevatorDrive;
 	private Encoder encoder;
-	private DigitalInput beamBreak;
+	private DigitalInput limitSwitch;
 
 	private Elevator() {
 		super(P, I, D);
@@ -66,16 +65,16 @@ public class Elevator extends PIDSubsystem {
 
 		encoder = new Encoder(RobotMap.E_ENCODER_A, RobotMap.E_ENCODER_B);
 		encoder.setReverseDirection(true);
-		beamBreak = new DigitalInput(RobotMap.E_BEAM_BREAK);
+		limitSwitch = new DigitalInput(RobotMap.E_LIMIT_SWITCH);
 
-		// setOutputRange(BOTTOM, TOP);
+		setInputRange(BOTTOM, TOP);  // TODO Check if works
 		setAbsoluteTolerance(ABSOLUTE_TOLERANCE);
 		enable();
 
 		LiveWindow.addActuator("Elevator", "Encoder", encoder);
-		LiveWindow.addSensor("Elevator", "Beam Break", beamBreak);
+		LiveWindow.addSensor("Elevator", "Limit Switch", limitSwitch);
 		LiveWindow.addSensor("Elevator", "PID Controller", getPIDController());
-		LiveWindow.addActuator("Elevator", "Elevator Drive", elevatorDrive);
+		LiveWindow.addActuator("Elevator", "Elevator Talon", elevatorDrive);
 
 		Preferences.getInstance().putDouble(pKey, P);
 		Preferences.getInstance().putDouble(iKey, I);
@@ -95,6 +94,7 @@ public class Elevator extends PIDSubsystem {
 		elevatorDrive.lift(speed);
 	}
 
+	/*
 	public void setSetpoint(double point) {
 		if (point < 0)
 			super.setSetpoint(0);
@@ -102,14 +102,14 @@ public class Elevator extends PIDSubsystem {
 			super.setSetpoint(TOP);
 		else
 			super.setSetpoint(point);
-	}
+	}*/
 
 	public void resetEncoder() {
 		encoder.reset();
 	}
 
 	public boolean isBeamBroken() {
-		return !beamBreak.get();
+		return !limitSwitch.get();
 	}
 
 
@@ -130,17 +130,17 @@ public class Elevator extends PIDSubsystem {
 	}
 
 	public void log() {
-		SmartDashboard.putNumber("Encoder", getPosition());
+		//SmartDashboard.putNumber("Encoder", getPosition());
 	}
 
 	private class ElevatorDrive implements LiveWindowSendable {
 
-		private CANTalon talon1;
+		private CANTalon talon;
 		private ITable m_table;
 		private ITableListener m_table_listener;
 
 		public ElevatorDrive(int channel1) {
-			talon1 = new CANTalon(channel1);
+			talon = new CANTalon(channel1);
 		}
 
 		@Override
@@ -163,13 +163,13 @@ public class Elevator extends PIDSubsystem {
 		@Override
 		public void updateTable() {
 			if (m_table != null) {
-				m_table.putNumber("Value1", talon1.getSpeed());
+				m_table.putNumber("Value1", talon.getSpeed());
 			}
 		}
 
 		@Override
 		public void startLiveWindowMode() {
-			talon1.set(0);
+			talon.set(0);
 			m_table_listener = new ITableListener() {
 				public void valueChanged(ITable itable, String key, Object value, boolean bln) {
 					lift(((Double) value).doubleValue());
@@ -181,11 +181,11 @@ public class Elevator extends PIDSubsystem {
 
 		@Override
 		public void stopLiveWindowMode() {
-			talon1.set(0);
+			talon.set(0);
 		}
 
 		public void lift(double speed) {
-			talon1.set(-speed);
+			talon.set(-speed);
 		}
 
 	}

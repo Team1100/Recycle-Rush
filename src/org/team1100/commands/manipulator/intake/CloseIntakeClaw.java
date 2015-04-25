@@ -16,7 +16,7 @@ public class CloseIntakeClaw extends Command {
 
 	@Override
 	protected void execute() {
-		Intake.getInstance().closeClaw();
+		Intake.getInstance().closeIntake();
 	}
 
 	@Override

@@ -16,7 +16,7 @@ public class ToggleIntakeClaw extends Command {
 
 	@Override
 	protected void execute() {
-		Intake.getInstance().toggleClaw();
+		Intake.getInstance().toggleIntake();
 	}
 
 	@Override

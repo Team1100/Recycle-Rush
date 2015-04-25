@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Intake extends Subsystem {
+
 	private static Intake intake;
 
 	public static Intake getInstance() {
@@ -26,6 +27,7 @@ public class Intake extends Subsystem {
 	private DoubleSolenoid solenoid;
 	private DigitalInput bannerSensorBack;
 	private DigitalInput bannerSensorFront;
+
 	private boolean isClawClosed;
 
 	private Intake() {
@@ -40,9 +42,9 @@ public class Intake extends Subsystem {
 
 		LiveWindow.addActuator("Intake", "Left Victor", victorLeft);
 		LiveWindow.addActuator("Intake", "Right Victor", victorRight);
-		LiveWindow.addSensor("Intake", "Solenoid", solenoid);
-		LiveWindow.addSensor("Intake", "Infrared Sensor", bannerSensorBack);
-		LiveWindow.addSensor("Intake", "Infrared Sensor", bannerSensorFront);
+		LiveWindow.addActuator("Intake", "Solenoid", solenoid);
+		LiveWindow.addSensor("Intake", "Front Banner Sensor", bannerSensorBack);
+		LiveWindow.addSensor("Intake", "Back Banner Sensors", bannerSensorFront);
 	}
 
 	public boolean isToteInElevator() {
@@ -54,38 +56,34 @@ public class Intake extends Subsystem {
 	}
 
 	public void rollIn() {
-		intake(1);
+		spin(1);
 	}
 
 	public void rollOut() {
-		intake(-1);
+		spin(-1);
 	}
 
 	public void stopIntake() {
-		intake(0);
+		spin(0);
 	}
 
-	public void toggleClaw() {
-		if (isClawClosed) {
-			solenoid.set(Value.kReverse);
-		} else {
-			solenoid.set(Value.kForward);
-		}
-		isClawClosed = !isClawClosed;
+	public void toggleIntake() {
+		if (isClawClosed)
+			openIntake();
+		else
+			closeIntake();
 	}
 
-	public void openClaw() {
-		if (isClawClosed) {
-			solenoid.set(Value.kReverse);
-			isClawClosed = false;
-		}
+	public void openIntake() {
+		solenoid.set(Value.kReverse);
+		isClawClosed = false;
+
 	}
 
-	public void closeClaw() {
-		if (!isClawClosed) {
-			solenoid.set(Value.kForward);
-			isClawClosed = true;
-		}
+	public void closeIntake() {
+		solenoid.set(Value.kForward);
+		isClawClosed = true;
+
 	}
 
 	@Override
@@ -93,14 +91,12 @@ public class Intake extends Subsystem {
 		setDefaultCommand(new UserSpinIntake());
 	}
 
-	public void intake(double speed) {
+	public void spin(double speed) {
 		victorLeft.set(speed);
 		victorRight.set(speed);
-
 	}
 
 	public void log() {
 		SmartDashboard.putBoolean("Tote In", isToteInElevator());
 	}
-
 }

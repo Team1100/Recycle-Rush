@@ -5,8 +5,7 @@ import org.team1100.commands.manipulator.arm.ToggleArmClaw;
 import org.team1100.commands.manipulator.arm.ToggleRotateArmClaw;
 import org.team1100.commands.manipulator.elevator.ResetElevatorEncoder;
 import org.team1100.commands.manipulator.intake.ToggleIntakeClaw;
-import org.team1100.commands.manipulator.miniarm.MoveMiniArm;
-import org.team1100.commands.manipulator.miniarm.ToggleMiniArm;
+import org.team1100.commands.manipulator.twitch.MoveTwitch;
 import org.team1100.input.AttackThree;
 import org.team1100.input.LaunchpadController;
 import org.team1100.input.XboxController;
@@ -42,10 +41,9 @@ public class OI {
 		// xbox.getButtonX().toggleWhenPressed(new ScoreTotes());
 		xbox.getButtonB().toggleWhenPressed(new PickUpTote());
 		xbox.getButtonBack().whenPressed(new ResetElevatorEncoder());
-		xbox.getButtonY().whenPressed(new ToggleMiniArm());
 
-		rightStick.getButton(10).whileHeld(new MoveMiniArm(false));
-		rightStick.getButton(11).whileHeld(new MoveMiniArm(true));
+		rightStick.getButton(10).whileHeld(new MoveTwitch(false));
+		rightStick.getButton(11).whileHeld(new MoveTwitch(true));
 	}
 
 	/**

@@ -1,22 +1,22 @@
-package org.team1100;
+package org.team1100;	
 
 import org.team1100.commands.autonomous.OneToteAuto;
 import org.team1100.commands.autonomous.ThreeToteAuto;
-import org.team1100.commands.autonomous.TwoToteAuto;
 import org.team1100.commands.drive.Drive;
-import org.team1100.commands.drive.Turn;
+import org.team1100.commands.manipulator.twitch.OpenTwitch;
 import org.team1100.commands.util.LogFileCommand;
 import org.team1100.subsystems.Arm;
 import org.team1100.subsystems.DriveTrain;
 import org.team1100.subsystems.Elevator;
 import org.team1100.subsystems.Intake;
-import org.team1100.subsystems.MiniArm;
+import org.team1100.subsystems.Twitch;
 
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.command.WaitCommand;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -50,28 +50,16 @@ public class Robot extends IterativeRobot {
 		Elevator.getInstance();
 		Intake.getInstance();
 		Arm.getInstance();
-		MiniArm.getInstance();
-
-		/*
-		 * SmartDashboard.putData(DriveTrain.getInstance());
-		 * SmartDashboard.putData(Elevator.getInstance());
-		 * SmartDashboard.putData(Intake.getInstance());
-		 * SmartDashboard.putData(Arm.getInstance());
-		 * SmartDashboard.putData(MiniArm.getInstance());
-		 */
-
-		SmartDashboard.putData(Scheduler.getInstance());
+		Twitch.getInstance();
 
 		autoChooser = new SendableChooser();
+		autoChooser.addObject("Do Nothing", new WaitCommand(.5));
 		autoChooser.addObject("Drive Only", new Drive(.7, .7, 2));
 		autoChooser.addObject("Pick Up 1 Tote", new OneToteAuto());
-		autoChooser.addObject("Pick Up 2 Totes", new TwoToteAuto());
 		autoChooser.addDefault("Pick Up 3 Totes", new ThreeToteAuto());
 
-		// SmartDashboard.putData(new TurnLeft());
-		// SmartDashboard.putData("Turn 90 Degrees Right", new Turn(90));
 		SmartDashboard.putData("Autonomous", autoChooser);
-		SmartDashboard.putData(new Turn(90));
+		SmartDashboard.putData(new OpenTwitch());
 	}
 
 	private void log() {
@@ -79,14 +67,12 @@ public class Robot extends IterativeRobot {
 		Arm.getInstance().log();
 		DriveTrain.getInstance().log();
 		Intake.getInstance().log();
-		// logFile.putNumber("POT", Arm.getInstance().getPosition());
+		SmartDashboard.putString("Auto Command", autoChooser.getSelected().getClass().getSimpleName());
 	}
 
 	public void autonomousInit() {
 		autoCommand = (Command) autoChooser.getSelected();
 		autoCommand.start();
-		if (!logFile.isRunning())
-			logFile.start();
 	}
 
 	public void autonomousPeriodic() {
@@ -97,8 +83,6 @@ public class Robot extends IterativeRobot {
 	public void teleopInit() {
 		if (autoCommand != null)
 			autoCommand.cancel();
-		if (!logFile.isRunning())
-			logFile.start();
 	}
 
 	public void teleopPeriodic() {

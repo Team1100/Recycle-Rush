@@ -8,6 +8,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Hashtable;
 
+import org.team1100.RobotMap;
+
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
@@ -34,11 +36,11 @@ public class LogFileCommand extends Command {
 		time = new SimpleDateFormat("HH:mm:ss");
 		String fileName = df.format(Calendar.getInstance().getTime());
 
-		File directory = new File("/media/sda1/logs");
+		File directory = new File(RobotMap.USB_FILE_LOCATION);
 		if (directory.exists() && directory.isDirectory()) {
 			logFile = new File(directory.getAbsolutePath() + "/" + fileName);
 		} else {
-			logFile = new File("/home/lvuser/robot/" + fileName);
+			logFile = new File(fileName);
 		}
 
 		try {

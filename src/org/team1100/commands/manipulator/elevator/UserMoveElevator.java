@@ -40,7 +40,6 @@ public class UserMoveElevator extends Command {
 
 	@Override
 	protected void interrupted() {
-		end();
 	}
 
 }
