@@ -3,7 +3,7 @@ package org.team1100.subsystems;
 import org.team1100.RobotMap;
 import org.team1100.commands.drive.UserDrive;
 
-import edu.wpi.first.wpilibj.Gyro;
+import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -23,7 +23,7 @@ public class DriveTrain extends Subsystem {
 	private RobotDrive drive;
 	private Victor victorLeft;
 	private Victor victorRight;
-	private Gyro gyro;
+	private AnalogGyro gyro;
 
 	/**
 	 * Initializes the DriveTrain, using the talon values from RobotMap
@@ -34,7 +34,7 @@ public class DriveTrain extends Subsystem {
 
 		drive = new RobotDrive(victorLeft, victorRight);
 
-		gyro = new Gyro(RobotMap.D_GYRO);
+		gyro = new AnalogGyro(RobotMap.D_GYRO);
 		gyro.reset();
 		
 		LiveWindow.addActuator("Drive Train", "Left Victor", victorLeft);
