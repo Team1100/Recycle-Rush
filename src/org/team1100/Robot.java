@@ -11,13 +11,10 @@ import org.team1100.subsystems.Elevator;
 import org.team1100.subsystems.Intake;
 import org.team1100.subsystems.Twitch;
 
-import edu.wpi.first.wpilibj.CameraServer;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.command.WaitCommand;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -34,25 +31,19 @@ public class Robot extends IterativeRobot {
 
 	private Command autoCommand;
 
-	private SendableChooser autoChooser;
+	private SendableChooser<Command> autoChooser;
 
 	public void robotInit() {
 		OI.getInstance();
 
 		logFile = new LogFileCommand();
-		try {
-			CameraServer.getInstance().setQuality(50);
-			CameraServer.getInstance().startAutomaticCapture(RobotMap.CAMERA_NAME);
-		} catch (Exception e) {
-			DriverStation.reportError(e.getMessage(), true);
-		}
 		DriveTrain.getInstance();
 		Elevator.getInstance();
 		Intake.getInstance();
 		Arm.getInstance();
 		Twitch.getInstance();
 
-		autoChooser = new SendableChooser();
+		autoChooser = new SendableChooser<Command>();
 		autoChooser.addObject("Do Nothing", new WaitCommand(.5));
 		autoChooser.addObject("Drive Only", new Drive(.7, .7, 2));
 		autoChooser.addObject("Pick Up 1 Tote", new OneToteAuto());
@@ -91,7 +82,6 @@ public class Robot extends IterativeRobot {
 	}
 
 	public void testPeriodic() {
-		LiveWindow.run();
 	}
 
 	public void disabledInit() {

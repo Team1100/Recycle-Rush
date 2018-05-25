@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Intake extends Subsystem {
@@ -39,12 +38,6 @@ public class Intake extends Subsystem {
 
 		solenoid.set(Value.kOff);
 		isClawClosed = false;
-
-		LiveWindow.addActuator("Intake", "Left Victor", victorLeft);
-		LiveWindow.addActuator("Intake", "Right Victor", victorRight);
-		LiveWindow.addActuator("Intake", "Solenoid", solenoid);
-		LiveWindow.addSensor("Intake", "Front Banner Sensor", bannerSensorBack);
-		LiveWindow.addSensor("Intake", "Back Banner Sensors", bannerSensorFront);
 	}
 
 	public boolean isToteInElevator() {

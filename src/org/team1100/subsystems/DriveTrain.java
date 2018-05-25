@@ -4,10 +4,9 @@ import org.team1100.RobotMap;
 import org.team1100.commands.drive.UserDrive;
 
 import edu.wpi.first.wpilibj.AnalogGyro;
-import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriveTrain extends Subsystem {
@@ -20,7 +19,7 @@ public class DriveTrain extends Subsystem {
 		return driveTrain;
 	}
 
-	private RobotDrive drive;
+	private DifferentialDrive drive;
 	private Victor victorLeft;
 	private Victor victorRight;
 	private AnalogGyro gyro;
@@ -32,14 +31,10 @@ public class DriveTrain extends Subsystem {
 		victorLeft = new Victor(RobotMap.D_LEFT_MOTOR);
 		victorRight = new Victor(RobotMap.D_RIGHT_MOTOR);
 
-		drive = new RobotDrive(victorLeft, victorRight);
+		drive = new DifferentialDrive(victorLeft, victorRight);
 
 		gyro = new AnalogGyro(RobotMap.D_GYRO);
 		gyro.reset();
-		
-		LiveWindow.addActuator("Drive Train", "Left Victor", victorLeft);
-		LiveWindow.addActuator("Drive Train", "Right Victor", victorRight);
-		LiveWindow.addSensor("Drive Train", "Gyro", gyro);
 	}
 
 	/**

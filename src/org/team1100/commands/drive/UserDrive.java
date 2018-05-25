@@ -2,8 +2,8 @@ package org.team1100.commands.drive;
 
 import org.team1100.OI;
 import org.team1100.subsystems.DriveTrain;
+import org.team1100.input.AttackThree;
 
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
 
 public class UserDrive extends Command {
@@ -18,8 +18,8 @@ public class UserDrive extends Command {
 
 	@Override
 	protected void execute() {
-		double leftValue = OI.getInstance().getLeftJoystick().getAxis(Joystick.AxisType.kY);
-		double rightValue = OI.getInstance().getRightJoystick().getAxis(Joystick.AxisType.kY);
+		double leftValue = OI.getInstance().getLeftJoystick().getAxis(AttackThree.AttackThreeAxis.kY);
+		double rightValue = OI.getInstance().getRightJoystick().getAxis(AttackThree.AttackThreeAxis.kY);
 
 		DriveTrain.getInstance().driveTank(leftValue, rightValue);
 	}

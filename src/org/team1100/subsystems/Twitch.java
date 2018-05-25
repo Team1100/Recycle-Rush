@@ -5,7 +5,6 @@ import org.team1100.RobotMap;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
 public class Twitch extends Subsystem {
 
@@ -23,9 +22,6 @@ public class Twitch extends Subsystem {
 	public Twitch() {
 		victor = new Victor(RobotMap.MA_MOTOR);
 		limitSwitch = new DigitalInput(6);
-
-		LiveWindow.addActuator("Twitch", "Arm Victor", victor);
-		LiveWindow.addSensor("Twitch", "Limit Switch", limitSwitch);
 	}
 
 	public boolean isOut() {

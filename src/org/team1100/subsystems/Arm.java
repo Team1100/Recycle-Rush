@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Arm extends Subsystem {
@@ -40,12 +39,6 @@ public class Arm extends Subsystem {
 
 		openClaw();        // TODO Test whether this actually opens or closes the claw
 		setClawParallel(); // TODO Test whether this actually rotates the claw to parallel
-
-		LiveWindow.addActuator("Arm", "Right Talon", talonRight);
-		LiveWindow.addActuator("Arm", "Left Talon", talonLeft);
-		LiveWindow.addActuator("Arm", "Toggle Gripper", gripperSolenoid);
-		LiveWindow.addActuator("Arm", "Rotate Claw", clawRotateSolenoid);
-		LiveWindow.addSensor("Arm", "Banner Sensor", bannerSensor);
 	}
 
 	public void moveArm(double speed) {
